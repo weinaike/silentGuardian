@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="#F5F5F5"
+    android:padding="24dp">
+
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="48dp"
+        android:src="@android:drawable/ic_secure"
+        android:tint="@color/primary" />
+
+    <TextView
+        android:id="@+id/tvPinTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="请输入解锁密码"
+        android:textColor="@color/text_primary"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+        
+    <TextView
+        android:id="@+id/tvPinSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="保护系统设置不被篡改"
+        android:textColor="@color/text_hint"
+        android:textSize="14sp" />
+
+    <!-- 密码点滴容器 -->
+    <LinearLayout
+        android:id="@+id/llPinDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <View android:id="@+id/dot1" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/bg_pin_dot_empty" android:layout_margin="12dp" />
+        <View android:id="@+id/dot2" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/bg_pin_dot_empty" android:layout_margin="12dp" />
+        <View android:id="@+id/dot3" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/bg_pin_dot_empty" android:layout_margin="12dp" />
+        <View android:id="@+id/dot4" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/bg_pin_dot_empty" android:layout_margin="12dp" />
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/tvErrorMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="#D32F2F"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        android:text="密码错误，请重试" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- 数字键盘 -->
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="4"
+        android:layout_marginBottom="32dp"
+        android:alignmentMode="alignMargins"
+        android:useDefaultMargins="true">
+
+        <Button style="@style/PinButton" android:text="1" android:tag="1" />
+        <Button style="@style/PinButton" android:text="2" android:tag="2" />
+        <Button style="@style/PinButton" android:text="3" android:tag="3" />
+        <Button style="@style/PinButton" android:text="4" android:tag="4" />
+        <Button style="@style/PinButton" android:text="5" android:tag="5" />
+        <Button style="@style/PinButton" android:text="6" android:tag="6" />
+        <Button style="@style/PinButton" android:text="7" android:tag="7" />
+        <Button style="@style/PinButton" android:text="8" android:tag="8" />
+        <Button style="@style/PinButton" android:text="9" android:tag="9" />
+        
+        <View android:layout_width="80dp" android:layout_height="80dp" /> <!-- Empty Space -->
+        <Button style="@style/PinButton" android:text="0" android:tag="0" />
+        
+        <!-- Delete Button -->
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@android:drawable/ic_input_delete"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:tint="@color/text_secondary"
+            android:layout_gravity="center" />
+    </GridLayout>
+
+</LinearLayout>

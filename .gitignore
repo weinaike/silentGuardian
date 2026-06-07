@@ -1,0 +1,26 @@
+*.iml
+.gradle
+local.properties
+.idea/
+.DS_Store
+build/
+app/build/
+/captures
+.externalNativeBuild
+.cxx
+
+# Virtual Environments
+venv/
+
+# AI Assistant & MCP Tools
+.agents/
+.claude/
+.playwright-mcp/
+skills-lock.json
+
+# Temporary / Scratch Scripts
+fix_*.py
+process_*.py
+refactor_*.py
+test_*.sh
+Gemini_Generated_Image_*.png

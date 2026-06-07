@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SilentGuardian - Android UI Prototype</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.0/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #F0F2F5;
+    min-height: 100vh;
+    padding: 48px 32px;
+  }
+  .page-title {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+  }
+  .page-subtitle {
+    text-align: center;
+    margin-bottom: 48px;
+    font-size: 15px;
+    color: #666;
+  }
+  .phones-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .phone-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .phone-label {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 12px;
+    font-style: italic;
+    letter-spacing: 0.04em;
+  }
+  /* Range slider thumb polish */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #4CAF50;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    margin-top: -8px;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #4CAF50;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+  /* Scrollbar styling for phone content */
+  ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+/* ========================================
+   SilentGuardian Android App Prototype
+   3 screens: Permission · Dashboard · App Select
+   Style: Material Design 3 · 护眼绿 #4CAF50
+   ======================================== */
+
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ── Android Frame ──
+const androidFrameStyles = {
+  wrapper: {
+    display: 'inline-block',
+    padding: 10,
+    background: '#1a1a1a',
+    borderRadius: 44,
+    boxShadow: '0 0 0 2px #2a2a2a, 0 20px 60px rgba(0,0,0,0.25)',
+    position: 'relative',
+  },
+  screen: {
+    position: 'relative',
+    borderRadius: 36,
+    overflow: 'hidden',
+    background: '#FAFAFA',
+  },
+  statusBar: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 32,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 24px',
+    fontSize: 13,
+    fontWeight: 500,
+    zIndex: 20,
+    pointerEvents: 'none',
+  },
+  punchHole: {
+    position: 'absolute',
+    top: 10,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: 14,
+    height: 14,
+    background: '#000',
+    borderRadius: '50%',
+    zIndex: 30,
+  },
+  content: {
+    position: 'absolute',
+    top: 32,
+    left: 0,
+    right: 0,
+    bottom: 24,
+    overflow: 'auto',
+  },
+  navBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 24,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+  },
+};
+
+function AndroidFrame({ children, width = 380, height = 780, time = '9:41', battery = 100, darkMode = false }) {
+  const textColor = darkMode ? '#fff' : '#1a1a1a';
+  return (
+    <div style={androidFrameStyles.wrapper}>
+      <div style={{ ...androidFrameStyles.screen, width, height, background: darkMode ? '#000' : '#FAFAFA' }}>
+        <div style={{ ...androidFrameStyles.statusBar, color: textColor }}>
+          <span>{time}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor">
+              <rect x="0" y="6" width="2" height="4" rx="0.5" />
+              <rect x="4" y="4" width="2" height="6" rx="0.5" />
+              <rect x="8" y="2" width="2" height="8" rx="0.5" />
+              <rect x="12" y="0" width="2" height="10" rx="0.5" />
+            </svg>
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+              <path d="M7 9a1 1 0 100-2 1 1 0 000 2z" fill="currentColor" />
+              <path d="M3 6a5 5 0 018 0" stroke="currentColor" strokeWidth="1.2" />
+              <path d="M0.5 3.5a11 11 0 0113 0" stroke="currentColor" strokeWidth="1.2" opacity="0.6" />
+            </svg>
+            <div style={{ width: 22, height: 10, border: '1.5px solid currentColor', borderRadius: 2, padding: 1 }}>
+              <div style={{ width: `${battery}%`, height: '100%', background: 'currentColor', borderRadius: 1 }} />
+            </div>
+            <span style={{ fontSize: 11, fontWeight: 600, marginLeft: 2 }}>{battery}%</span>
+          </div>
+        </div>
+        <div style={androidFrameStyles.punchHole} />
+        <div style={androidFrameStyles.content}>
+          {children}
+        </div>
+        <div style={androidFrameStyles.navBar}>
+          <div style={{ width: 100, height: 4, background: darkMode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.25)', borderRadius: 999 }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Design Tokens ──
+const T = {
+  primary: '#4CAF50',
+  primaryLight: '#E8F5E9',
+  primaryDark: '#2E7D32',
+  accent: '#FF9800',
+  surface: '#FFFFFF',
+  surfaceVariant: '#F5F7F5',
+  onSurface: '#1B1C18',
+  onSurfaceVariant: '#44483D',
+  outline: '#C2C9BD',
+  danger: '#D32F2F',
+  dangerLight: '#FFEBEE',
+  success: '#4CAF50',
+  successLight: '#E8F5E9',
+  textPrimary: '#1B1C18',
+  textSecondary: '#5F6368',
+  textHint: '#9AA0A6',
+  radius: { sm: 8, md: 16, lg: 24 },
+  spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+};
+
+// ── Icon helpers (simple SVG) ──
+function ShieldIcon({ size = 24, color = T.primary }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" fill={color} opacity="0.15" stroke={color} strokeWidth="1.5" />
+      <path d="M9 12l2 2 4-4" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function CheckCircleIcon({ size = 20, color = T.success }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill={color}>
+      <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-1 15l-5-5 1.41-1.41L9 12.17l7.59-7.59L18 6l-9 9z"/>
+    </svg>
+  );
+}
+
+function CrossCircleIcon({ size = 20, color = T.danger }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill={color}>
+      <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm5 13.59L13.59 15 10 11.41 6.41 15 5 13.59 8.59 10 5 6.41 6.41 5 10 8.59 13.59 5 15 6.41 11.41 10 15 13.59z"/>
+    </svg>
+  );
+}
+
+function SettingsIcon({ size = 24, color = T.textSecondary }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
+    </svg>
+  );
+}
+
+function PlusIcon({ size = 20, color = T.primary }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
+      <line x1="10" y1="4" x2="10" y2="16" />
+      <line x1="4" y1="10" x2="16" y2="10" />
+    </svg>
+  );
+}
+
+function SearchIcon({ size = 20, color = T.textHint }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round">
+      <circle cx="9" cy="9" r="5" />
+      <line x1="13" y1="13" x2="17" y2="17" />
+    </svg>
+  );
+}
+
+function BackIcon({ size = 20, color = T.textPrimary }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="12,4 6,10 12,16" />
+    </svg>
+  );
+}
+
+// ── App Icon Placeholder ──
+function AppIcon({ name, color, size = 40 }) {
+  const initial = name.charAt(0);
+  return (
+    <div style={{
+      width: size,
+      height: size,
+      borderRadius: 10,
+      background: color,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#fff',
+      fontSize: size * 0.4,
+      fontWeight: 700,
+      flexShrink: 0,
+    }}>
+      {initial}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════
+// PAGE 1: Permission Guide
+// ══════════════════════════════════════════
+function PermissionScreen() {
+  const [permissions, setPermissions] = useState({
+    notification: false,
+    usage: false,
+    vpn: false,
+    battery: false,
+  });
+
+  const togglePermission = (key) => {
+    setPermissions(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const allGranted = permissions.notification && permissions.usage && permissions.vpn && permissions.battery;
+
+  const steps = [
+    { key: 'notification', label: '通知栏常驻权限', desc: '保持守护服务在后台持续运行', icon: '🔔' },
+    { key: 'usage', label: '应用使用情况访问', desc: '用于判断当前是否在使用 AI 语音应用', icon: '📊' },
+    { key: 'vpn', label: 'VPN 连接授权', desc: '用于在网络层阻断管控应用的网络访问', icon: '🔐' },
+    { key: 'battery', label: '忽略电池优化', desc: '防止系统为省电而关闭守护服务', icon: '🔋' },
+  ];
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#FAFAFA' }}>
+      {/* Header area with logo */}
+      <div style={{
+        padding: '40px 24px 24px',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          width: 72, height: 72,
+          borderRadius: 20,
+          background: `linear-gradient(135deg, ${T.primary} 0%, ${T.primaryDark} 100%)`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          margin: '0 auto 16px',
+          boxShadow: `0 4px 16px ${T.primary}40`,
+        }}>
+          <ShieldIcon size={36} color="#fff" />
+        </div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: T.textPrimary, marginBottom: 4 }}>
+          Silent Guardian
+        </div>
+        <div style={{ fontSize: 13, color: T.textSecondary }}>
+          默默守护，健康对话
+        </div>
+      </div>
+
+      {/* Permission Steps */}
+      <div style={{ flex: 1, padding: '0 20px', overflow: 'auto' }}>
+        {steps.map((step, i) => {
+          const granted = permissions[step.key];
+          return (
+            <div
+              key={step.key}
+              onClick={() => togglePermission(step.key)}
+              style={{
+                background: granted ? T.successLight : T.surface,
+                border: `1px solid ${granted ? '#A5D6A7' : T.outline}`,
+                borderRadius: T.radius.md,
+                padding: '16px',
+                marginBottom: 12,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  width: 36, height: 36,
+                  borderRadius: 10,
+                  background: granted ? '#C8E6C9' : '#F5F5F5',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 18,
+                  flexShrink: 0,
+                }}>
+                  {step.icon}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                    <span style={{ fontSize: 11, color: T.textHint, fontWeight: 500 }}>
+                      步骤 {i + 1}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: T.textPrimary }}>
+                    {step.label}
+                  </div>
+                  <div style={{ fontSize: 12, color: T.textSecondary, marginTop: 2 }}>
+                    {step.desc}
+                  </div>
+                </div>
+                <div style={{ flexShrink: 0 }}>
+                  {granted ? <CheckCircleIcon /> : <CrossCircleIcon />}
+                </div>
+              </div>
+              {!granted && (
+                <div style={{
+                  marginTop: 10,
+                  padding: '8px 16px',
+                  background: T.primary,
+                  color: '#fff',
+                  borderRadius: 8,
+                  textAlign: 'center',
+                  fontSize: 13,
+                  fontWeight: 600,
+                }}>
+                  去授权
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Bottom Button */}
+      <div style={{ padding: '16px 20px 20px' }}>
+        <div style={{
+          padding: '14px 0',
+          borderRadius: 12,
+          background: allGranted
+            ? `linear-gradient(135deg, ${T.primary} 0%, ${T.primaryDark} 100%)`
+            : '#E0E0E0',
+          color: allGranted ? '#fff' : '#9E9E9E',
+          textAlign: 'center',
+          fontSize: 15,
+          fontWeight: 700,
+          cursor: allGranted ? 'pointer' : 'not-allowed',
+          transition: 'all 0.3s ease',
+          boxShadow: allGranted ? `0 4px 12px ${T.primary}40` : 'none',
+        }}>
+          {allGranted ? '进入主控面板' : '请先完成全部授权'}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════
+// PAGE 2: Main Dashboard
+// ══════════════════════════════════════════
+function DashboardScreen({ onNavigateToAppSelect }) {
+  const [serviceOn, setServiceOn] = useState(true);
+  const [usedMinutes, setUsedMinutes] = useState(15);
+  const limitMinutes = 30;
+  const percentage = Math.min((usedMinutes / limitMinutes) * 100, 100);
+  const isOverLimit = usedMinutes >= limitMinutes;
+
+  // Simulate time ticking
+  useEffect(() => {
+    if (!serviceOn) return;
+    const timer = setInterval(() => {
+      setUsedMinutes(prev => {
+        if (prev >= limitMinutes) return limitMinutes;
+        return prev + 1;
+      });
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [serviceOn]);
+
+  const managedApps = [
+    { name: '豆包', color: '#2196F3' },
+    { name: '腾讯元宝', color: '#FF6D00' },
+  ];
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#FAFAFA' }}>
+      {/* Top Bar */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '12px 20px',
+        background: T.surface,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <ShieldIcon size={22} />
+          <span style={{ fontSize: 17, fontWeight: 700, color: T.textPrimary }}>守护面板</span>
+        </div>
+        <div style={{ cursor: 'pointer', padding: 4 }}>
+          <SettingsIcon size={22} />
+        </div>
+      </div>
+
+      <div style={{ flex: 1, padding: '16px 20px', overflow: 'auto' }}>
+        {/* Service Card */}
+        <div style={{
+          background: serviceOn
+            ? `linear-gradient(135deg, ${T.primary} 0%, ${T.primaryDark} 100%)`
+            : '#E8E8E8',
+          borderRadius: T.radius.lg,
+          padding: '20px',
+          marginBottom: 16,
+          boxShadow: serviceOn ? `0 4px 20px ${T.primary}30` : 'none',
+          transition: 'all 0.3s ease',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: serviceOn ? '#fff' : T.textSecondary }}>
+              核心守护服务
+            </span>
+            {/* Android Material Switch */}
+            <div
+              onClick={() => setServiceOn(!serviceOn)}
+              style={{
+                width: 48, height: 26,
+                borderRadius: 13,
+                background: serviceOn ? '#A5D6A7' : '#BDBDBD',
+                position: 'relative',
+                cursor: 'pointer',
+                transition: 'background 0.3s',
+              }}
+            >
+              <div style={{
+                width: 22, height: 22,
+                borderRadius: 11,
+                background: '#fff',
+                position: 'absolute',
+                top: 2,
+                left: serviceOn ? 24 : 2,
+                transition: 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+              }} />
+            </div>
+          </div>
+          <div style={{ fontSize: 13, color: serviceOn ? 'rgba(255,255,255,0.85)' : T.textHint }}>
+            {serviceOn ? '正在默默守护中...' : '守护服务已关闭'}
+          </div>
+        </div>
+
+        {/* Usage Card */}
+        <div style={{
+          background: T.surface,
+          borderRadius: T.radius.lg,
+          padding: '20px',
+          marginBottom: 16,
+          border: `1px solid ${T.outline}30`,
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: T.textSecondary, marginBottom: 16 }}>
+            今日 AI 应用使用情况
+          </div>
+
+          {/* Big number */}
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <span style={{ fontSize: 40, fontWeight: 700, color: isOverLimit ? T.danger : T.textPrimary, lineHeight: 1 }}>
+              {usedMinutes}
+            </span>
+            <span style={{ fontSize: 14, color: T.textSecondary, marginLeft: 4 }}>
+              分钟
+            </span>
+            <span style={{ fontSize: 16, color: T.textHint, marginLeft: 8 }}>
+              / {limitMinutes} 分钟
+            </span>
+          </div>
+
+          {/* Progress bar */}
+          <div style={{
+            height: 8,
+            borderRadius: 4,
+            background: '#E8E8E8',
+            overflow: 'hidden',
+            marginBottom: 8,
+          }}>
+            <div style={{
+              width: `${percentage}%`,
+              height: '100%',
+              borderRadius: 4,
+              background: isOverLimit
+                ? T.danger
+                : percentage > 75
+                  ? T.accent
+                  : T.primary,
+              transition: 'width 0.8s ease, background 0.3s ease',
+            }} />
+          </div>
+
+          <div style={{ textAlign: 'center', fontSize: 12, color: T.textHint }}>
+            {isOverLimit
+              ? '已超出上限，网络已自动阻断'
+              : `还剩 ${limitMinutes - usedMinutes} 分钟可用`}
+          </div>
+        </div>
+
+        {/* Managed Apps Card */}
+        <div style={{
+          background: T.surface,
+          borderRadius: T.radius.lg,
+          padding: '20px',
+          border: `1px solid ${T.outline}30`,
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: T.textSecondary, marginBottom: 14 }}>
+            正在管控的 AI 应用
+          </div>
+
+          {managedApps.map(app => (
+            <div key={app.name} style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '8px 0',
+            }}>
+              <AppIcon name={app.name} color={app.color} />
+              <span style={{ fontSize: 15, fontWeight: 500, color: T.textPrimary }}>
+                {app.name}
+              </span>
+            </div>
+          ))}
+
+          {/* Add button */}
+          <div
+            onClick={onNavigateToAppSelect}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              marginTop: 12,
+              padding: '10px',
+              borderRadius: 10,
+              border: `1.5px dashed ${T.primary}60`,
+              cursor: 'pointer',
+              color: T.primary,
+              fontSize: 13,
+              fontWeight: 600,
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = T.primaryLight}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          >
+            <PlusIcon size={16} />
+            添加 / 修改管控应用
+          </div>
+        </div>
+
+        {/* VPN Notice */}
+        {serviceOn && (
+          <div style={{
+            background: '#FFF8E1',
+            borderRadius: T.radius.md,
+            padding: '12px 16px',
+            border: '1px solid #FFE082',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 10,
+          }}>
+            <span style={{ fontSize: 16, lineHeight: '20px' }}>💡</span>
+            <div style={{ fontSize: 12, color: '#795548', lineHeight: 1.5 }}>
+              守护服务运行时，手机状态栏会显示🔑钥匙图标，这是 VPN 连接的正常现象。孩子可能会注意到。
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════
+// PAGE 3: App Selection & Settings
+// ══════════════════════════════════════════
+function AppSelectScreen() {
+  const [limit, setLimit] = useState(30);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedApps, setSelectedApps] = useState(new Set(['豆包', '腾讯元宝']));
+
+  const allApps = [
+    { name: '豆包', color: '#2196F3', category: 'AI' },
+    { name: '腾讯元宝', color: '#FF6D00', category: 'AI' },
+    { name: 'Kimi', color: '#6C5CE7', category: 'AI' },
+    { name: '文心一言', color: '#2196F3', category: 'AI' },
+    { name: '通义千问', color: '#FF6B00', category: 'AI' },
+    { name: '微信', color: '#07C160', category: '社交' },
+    { name: '抖音', color: '#161823', category: '娱乐' },
+    { name: '小红书', color: '#FE2C55', category: '生活' },
+    { name: 'QQ', color: '#12B7F5', category: '社交' },
+    { name: 'B站', color: '#FB7299', category: '娱乐' },
+  ];
+
+  const filteredApps = allApps.filter(app =>
+    app.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const toggleApp = (name) => {
+    setSelectedApps(prev => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#FAFAFA' }}>
+      {/* Top Bar */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '12px 16px',
+        background: T.surface,
+        borderBottom: `1px solid ${T.outline}30`,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
+          <BackIcon />
+          <span style={{ fontSize: 15, color: T.textPrimary }}>返回</span>
+        </div>
+        <span style={{ fontSize: 16, fontWeight: 700, color: T.textPrimary }}>
+          配置守护规则
+        </span>
+        <div style={{
+          padding: '6px 14px',
+          borderRadius: 8,
+          background: T.primary,
+          color: '#fff',
+          fontSize: 13,
+          fontWeight: 600,
+          cursor: 'pointer',
+        }}>
+          保存
+        </div>
+      </div>
+
+      <div style={{ flex: 1, overflow: 'auto', padding: '16px 20px' }}>
+        {/* Time Limit Card */}
+        <div style={{
+          background: T.surface,
+          borderRadius: T.radius.md,
+          padding: '18px',
+          marginBottom: 16,
+          border: `1px solid ${T.outline}30`,
+        }}>
+          <div style={{
+            fontSize: 15, fontWeight: 600, color: T.textPrimary, marginBottom: 4,
+          }}>
+            每日全局语音可用时长
+          </div>
+          <div style={{
+            fontSize: 32, fontWeight: 700, color: T.primary, marginBottom: 12, lineHeight: 1.2,
+          }}>
+            {limit} 分钟
+          </div>
+
+          {/* SeekBar */}
+          <div style={{ position: 'relative', padding: '8px 0' }}>
+            <input
+              type="range"
+              min={5}
+              max={120}
+              step={5}
+              value={limit}
+              onChange={e => setLimit(Number(e.target.value))}
+              style={{
+                width: '100%',
+                height: 6,
+                WebkitAppearance: 'none',
+                appearance: 'none',
+                background: `linear-gradient(to right, ${T.primary} ${((limit - 5) / 115) * 100}%, #E0E0E0 ${((limit - 5) / 115) * 100}%)`,
+                borderRadius: 3,
+                outline: 'none',
+                cursor: 'pointer',
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+              <span style={{ fontSize: 11, color: T.textHint }}>5 分钟</span>
+              <span style={{ fontSize: 11, color: T.textHint }}>120 分钟</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          background: T.surface,
+          borderRadius: 10,
+          padding: '10px 14px',
+          marginBottom: 12,
+          border: `1px solid ${T.outline}40`,
+        }}>
+          <SearchIcon />
+          <input
+            type="text"
+            placeholder="搜索应用..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            style={{
+              flex: 1, border: 'none', outline: 'none',
+              fontSize: 14, color: T.textPrimary,
+              background: 'transparent',
+              fontFamily: 'inherit',
+            }}
+          />
+        </div>
+
+        {/* App List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {filteredApps.map(app => {
+            const isSelected = selectedApps.has(app.name);
+            return (
+              <div
+                key={app.name}
+                onClick={() => toggleApp(app.name)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '12px 14px',
+                  borderRadius: 12,
+                  cursor: 'pointer',
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#F5F5F5'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                {/* Checkbox */}
+                <div style={{
+                  width: 22, height: 22,
+                  borderRadius: 6,
+                  border: isSelected ? 'none' : `2px solid ${T.outline}`,
+                  background: isSelected ? T.primary : 'transparent',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                  transition: 'all 0.2s',
+                }}>
+                  {isSelected && (
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+                      <path d="M1 5l4 4L13 1" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </div>
+                <AppIcon name={app.name} color={app.color} size={36} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: T.textPrimary }}>{app.name}</div>
+                  <div style={{ fontSize: 11, color: T.textHint }}>{app.category}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════
+// Main App: 3 phones side by side
+// ══════════════════════════════════════════
+function App() {
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  return (
+    <div>
+      <div className="page-title">SilentGuardian · UI Prototype</div>
+      <div className="page-subtitle">AI 语音陪伴防沉迷系统 · Material Design 3 · 护眼绿</div>
+
+      <div className="phones-container">
+        {/* Phone 1: Permission Guide */}
+        <div className="phone-wrapper">
+          <div className="phone-label">权限引导页 · PermissionActivity</div>
+          <AndroidFrame width={380} height={780} battery={92}>
+            <PermissionScreen />
+          </AndroidFrame>
+        </div>
+
+        {/* Phone 2: Main Dashboard */}
+        <div className="phone-wrapper">
+          <div className="phone-label">主控看板页 · MainActivity</div>
+          <AndroidFrame width={380} height={780} battery={85}>
+            <DashboardScreen />
+          </AndroidFrame>
+        </div>
+
+        {/* Phone 3: App Selection */}
+        <div className="phone-wrapper">
+          <div className="phone-label">应用选择页 · AppSelectActivity</div>
+          <AndroidFrame width={380} height={780} battery={78}>
+            <AppSelectScreen />
+          </AndroidFrame>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_surface"
+    android:paddingBottom="16dp">
+
+    <!-- Drag handle indicator -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:background="#E0E0E0" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="健康防沉迷规则"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:padding="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="16dp">
+
+        <!-- 每日总时长 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="每日总时长上限"
+                android:textColor="#333"
+                android:textSize="16sp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/tvDailyLimit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="120 分钟"
+                android:textColor="#4CAF50"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <SeekBar
+            android:id="@+id/sbDailyLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:progressTint="#4CAF50"
+            android:thumbTint="#4CAF50"/>
+
+        <!-- 每次连续使用上限 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="每次连续使用上限"
+                android:textColor="#333"
+                android:textSize="16sp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/tvContinuousLimit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 分钟"
+                android:textColor="#4CAF50"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <SeekBar
+            android:id="@+id/sbContinuousLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:progressTint="#4CAF50"
+            android:thumbTint="#4CAF50"/>
+
+        <!-- 强制休息冷却时间 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="强制休息冷却时间"
+                android:textColor="#333"
+                android:textSize="16sp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/tvCooldown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 分钟"
+                android:textColor="#4CAF50"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <SeekBar
+            android:id="@+id/sbCooldown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:progressTint="#4CAF50"
+            android:thumbTint="#4CAF50"/>
+
+        <Button
+            android:id="@+id/btnSaveSettings"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:text="保存设置"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</LinearLayout>
