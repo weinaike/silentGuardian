@@ -7,8 +7,11 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         
-        // 极速本地存储框架 MMKV 初始化
-        MMKV.initialize(this)
+        // 极速本地存储框架 MMKV 初始化 (仅在用户已同意隐私政策后初始化)
+        val sp = getSharedPreferences("app_config", android.content.Context.MODE_PRIVATE)
+        if (sp.getBoolean("is_privacy_accepted", false)) {
+            MMKV.initialize(this)
+        }
         
         // 全局异常捕获，兜底恢复网络
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
