@@ -65,6 +65,35 @@ class OtherFragment : Fragment() {
         view.findViewById<View>(R.id.cvManageApps)?.setOnClickListener {
             startActivity(Intent(requireContext(), AppSelectActivity::class.java))
         }
+
+        view.findViewById<View>(R.id.cvPrivacy)?.setOnClickListener {
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("用户协议与隐私政策")
+                .setMessage("撤回隐私协议同意将停止所有数据记录，并清空本地存储，App 将退出且不可用直到您再次同意。\n\n您确定要撤回同意吗？")
+                .setPositiveButton("撤回同意并退出") { _, _ ->
+                    requireContext().getSharedPreferences("app_config", android.content.Context.MODE_PRIVATE)
+                        .edit().putBoolean("is_privacy_accepted", false).apply()
+                    DataManager.clearAllUsageData()
+                    DataManager.managedApps = emptySet()
+                    requireActivity().finishAffinity()
+                    kotlin.system.exitProcess(0)
+                }
+                .setNegativeButton("取消", null)
+                .show()
+        }
+
+        val tvVersionTitle = view.findViewById<TextView>(R.id.tvVersionTitle)
+        val appVersionName = try {
+            requireContext().packageManager.getPackageInfo(requireContext().packageName, 0).versionName
+        } catch (e: Exception) {
+            "Unknown"
+        }
+        tvVersionTitle?.text = "检查更新 (v$appVersionName)"
+
+        view.findViewById<View>(R.id.cvVersion)?.setOnClickListener {
+            Toast.makeText(requireContext(), "正在检查更新...", Toast.LENGTH_SHORT).show()
+            com.example.silentguardian.utils.UpdateManager.checkUpdate(requireActivity())
+        }
         
         return view
     }
