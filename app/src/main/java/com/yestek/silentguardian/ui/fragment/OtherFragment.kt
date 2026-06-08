@@ -149,7 +149,7 @@ class OtherFragment : Fragment() {
 
         view.findViewById<View>(R.id.llViewPrivacy)?.setOnClickListener {
             dialog.dismiss()
-            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                 .setTitle("用户协议与隐私政策")
                 .setMessage(com.yestek.silentguardian.utils.PrivacyPolicyConstants.POLICY_TEXT)
                 .setPositiveButton("已阅", null)
@@ -158,9 +158,9 @@ class OtherFragment : Fragment() {
 
         view.findViewById<View>(R.id.llWithdrawPrivacy)?.setOnClickListener {
             dialog.dismiss()
-            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                 .setTitle("撤回隐私协议授权")
-                .setMessage("撤回隐私协议同意将停止所有数据记录，并清空本地存储，App 将退出且不可用直到您再次同意。\n\n您确定要撤回同意吗？")
+                .setMessage(android.text.Html.fromHtml("撤回隐私协议同意将停止所有数据记录，并清空本地存储，App 将退出且不可用直到您再次同意。<br><br><font color='#D32F2F'><b>您确定要撤回同意吗？</b></font>", android.text.Html.FROM_HTML_MODE_COMPACT))
                 .setPositiveButton("撤回同意并退出") { _, _ ->
                     requireContext().getSharedPreferences("app_config", android.content.Context.MODE_PRIVATE)
                         .edit().putBoolean("is_privacy_accepted", false).apply()

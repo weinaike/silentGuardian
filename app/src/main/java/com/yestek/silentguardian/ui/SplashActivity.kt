@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun showPrivacyDialog() {
-        AlertDialog.Builder(this)
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle("用户协议与隐私政策")
             .setMessage(com.yestek.silentguardian.utils.PrivacyPolicyConstants.POLICY_TEXT)
             .setCancelable(false)

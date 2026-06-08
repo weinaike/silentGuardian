@@ -110,9 +110,9 @@ class PermissionFragment : Fragment() {
     private fun requestPermission(key: String) {
         when (key) {
             "notification" -> {
-                androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                     .setTitle("授权引导")
-                    .setMessage("接下来将跳转至「通知」设置。\n\n为了保证防沉迷服务在后台持续稳定运行而不被清理，我们需要常驻一条系统通知。请在接下来的界面中打开允许通知的开关。")
+                    .setMessage(android.text.Html.fromHtml("接下来将跳转至「通知」设置。<br><br>为了保证防沉迷服务在后台持续稳定运行而不被清理，我们需要常驻一条系统通知。请在接下来的界面中打开<font color='#4CAF50'><b>允许通知</b></font>的开关。", android.text.Html.FROM_HTML_MODE_COMPACT))
                     .setPositiveButton("去设置") { _, _ ->
                         XXPermissions.with(requireActivity())
                             .permission(Permission.POST_NOTIFICATIONS)
@@ -122,9 +122,9 @@ class PermissionFragment : Fragment() {
                     .show()
             }
             "usage" -> {
-                androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                     .setTitle("授权引导")
-                    .setMessage("接下来将跳转至「使用情况访问权限」设置。\n\n为了能够准确判断您当前是否正在使用受管 App，请在接下来的列表中找到「AI 语音锁」，并将其状态修改为【允许访问使用记录】。")
+                    .setMessage(android.text.Html.fromHtml("接下来将跳转至「使用情况访问权限」设置。<br><br>为了能够准确判断您当前是否正在使用受管 App，请在接下来的列表中找到「AI 语音锁」，并将其状态修改为<font color='#4CAF50'><b>【允许访问使用记录】</b></font>。", android.text.Html.FROM_HTML_MODE_COMPACT))
                     .setPositiveButton("去设置") { _, _ ->
                         XXPermissions.with(requireActivity())
                             .permission(Permission.PACKAGE_USAGE_STATS)
@@ -134,9 +134,9 @@ class PermissionFragment : Fragment() {
                     .show()
             }
             "battery" -> {
-                androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                     .setTitle("授权引导")
-                    .setMessage("接下来将跳转至「电池优化」设置。\n\n由于 Android 系统的省电机制会强制关闭后台应用，为了防沉迷服务能稳定生效，请务必将其设置为【无限制】或【不优化】。")
+                    .setMessage(android.text.Html.fromHtml("接下来将跳转至「电池优化」设置。<br><br>由于 Android 系统的省电机制会强制关闭后台应用，为了防沉迷服务能稳定生效，请务必将其设置为<font color='#4CAF50'><b>【无限制】</b></font>或<font color='#4CAF50'><b>【不优化】</b></font>。", android.text.Html.FROM_HTML_MODE_COMPACT))
                     .setPositiveButton("去设置") { _, _ ->
                         XXPermissions.with(requireActivity())
                             .permission(Permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
@@ -146,9 +146,9 @@ class PermissionFragment : Fragment() {
                     .show()
             }
             "vpn" -> {
-                androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                     .setTitle("授权引导")
-                    .setMessage("接下来将弹出系统级别的「网络连接请求」确认框。\n\n此功能仅用于在设备本地建立虚拟黑洞来阻断受管 App 的网络，绝对不会上传您的任何流量数据。请放心点击【确定】。")
+                    .setMessage(android.text.Html.fromHtml("接下来将弹出系统级别的「网络连接请求」确认框。<br><br>此功能仅用于在设备本地建立虚拟黑洞来阻断受管 App 的网络，绝对不会上传您的任何流量数据。请放心点击<font color='#4CAF50'><b>【确定】</b></font>。", android.text.Html.FROM_HTML_MODE_COMPACT))
                     .setPositiveButton("去授权") { _, _ ->
                         val intent = VpnService.prepare(requireContext())
                         if (intent != null) {
