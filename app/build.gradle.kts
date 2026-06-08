@@ -11,8 +11,30 @@ android {
         applicationId = "com.example.silentguardian"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "0.1.0"
+        versionCode = 5
+        versionName = "0.1.3"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("release.keystore")
+            storePassword = "123456"
+            keyAlias = "silentguardian"
+            keyPassword = "123456"
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
     }
 
     // ViewBinding generates Java code, which triggers javac and fails on JDK 26 due to jlink bug.
