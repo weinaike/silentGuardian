@@ -1,4 +1,4 @@
-package com.example.silentguardian.receiver
+package com.yestek.silentguardian.receiver
 
 import android.app.admin.DeviceAdminReceiver
 import android.content.Context

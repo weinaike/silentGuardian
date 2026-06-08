@@ -6,7 +6,7 @@
 
 - **开发语言**: 统一采用 **Kotlin**（包含 Coroutines），严禁混用 Java。
 - **目标 SDK 版本**: `minSdkVersion` = 24 (Android 7.0), `targetSdkVersion` = 34 (Android 14)。
-- **包名约定**: `com.example.silentguardian`。
+- **包名约定**: `com.yestek.silentguardian`。
 - **UI 架构**: 采用 **Material Components + ViewBinding + ViewModel** 模式。未经主控用户同意，不得私自引入 Compose 或其他 UI 框架。
 
 ## 2. 依赖项及第三方库规范

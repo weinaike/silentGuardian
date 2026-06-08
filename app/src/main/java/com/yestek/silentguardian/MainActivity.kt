@@ -1,11 +1,11 @@
-package com.example.silentguardian
+package com.yestek.silentguardian
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.silentguardian.ui.fragment.HomeFragment
-import com.example.silentguardian.ui.fragment.OtherFragment
-import com.example.silentguardian.ui.fragment.PermissionFragment
+import com.yestek.silentguardian.ui.fragment.HomeFragment
+import com.yestek.silentguardian.ui.fragment.OtherFragment
+import com.yestek.silentguardian.ui.fragment.PermissionFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        com.example.silentguardian.utils.UpdateManager.checkUpdate(this)
+        com.yestek.silentguardian.utils.UpdateManager.checkUpdate(this)
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomNav.setOnItemSelectedListener { item ->
@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (com.example.silentguardian.manager.DataManager.appPinCode.isEmpty() || !com.example.silentguardian.manager.DataManager.isAppUnlocked) {
-            val intent = android.content.Intent(this, com.example.silentguardian.ui.PinLockActivity::class.java)
+        if (com.yestek.silentguardian.manager.DataManager.appPinCode.isEmpty() || !com.yestek.silentguardian.manager.DataManager.isAppUnlocked) {
+            val intent = android.content.Intent(this, com.yestek.silentguardian.ui.PinLockActivity::class.java)
             startActivity(intent)
         }
     }

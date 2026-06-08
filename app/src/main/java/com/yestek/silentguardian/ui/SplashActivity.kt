@@ -1,12 +1,12 @@
-package com.example.silentguardian.ui
+package com.yestek.silentguardian.ui
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.silentguardian.MainActivity
-import com.example.silentguardian.manager.DataManager
+import com.yestek.silentguardian.MainActivity
+import com.yestek.silentguardian.manager.DataManager
 import com.tencent.mmkv.MMKV
 
 class SplashActivity : AppCompatActivity() {
@@ -44,7 +44,7 @@ class SplashActivity : AppCompatActivity() {
         MMKV.initialize(applicationContext)
         
         // 判断是否需要引导权限
-        val intent = if (!com.example.silentguardian.manager.DataManager.isServiceEnabled) {
+        val intent = if (!com.yestek.silentguardian.manager.DataManager.isServiceEnabled) {
             // 如果服务没开启，说明没走完权限流程（或者主动关了），跳权限引导
             Intent(this, PermissionActivity::class.java)
         } else {

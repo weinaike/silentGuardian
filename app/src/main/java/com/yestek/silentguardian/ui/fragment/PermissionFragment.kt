@@ -1,4 +1,4 @@
-package com.example.silentguardian.ui.fragment
+package com.yestek.silentguardian.ui.fragment
 
 import android.content.Intent
 import android.graphics.Color
@@ -17,9 +17,9 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.example.silentguardian.R
-import com.example.silentguardian.manager.DataManager
-import com.example.silentguardian.receiver.AdminReceiver
+import com.yestek.silentguardian.R
+import com.yestek.silentguardian.manager.DataManager
+import com.yestek.silentguardian.receiver.AdminReceiver
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 

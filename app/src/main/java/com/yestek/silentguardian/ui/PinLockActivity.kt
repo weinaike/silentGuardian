@@ -1,4 +1,4 @@
-package com.example.silentguardian.ui
+package com.yestek.silentguardian.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -8,9 +8,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.silentguardian.MainActivity
-import com.example.silentguardian.R
-import com.example.silentguardian.manager.DataManager
+import com.yestek.silentguardian.MainActivity
+import com.yestek.silentguardian.R
+import com.yestek.silentguardian.manager.DataManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

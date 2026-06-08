@@ -1,4 +1,4 @@
-package com.example.silentguardian.ui.fragment
+package com.yestek.silentguardian.ui.fragment
 
 import android.content.Context
 import android.content.Intent
@@ -14,10 +14,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.example.silentguardian.R
-import com.example.silentguardian.manager.DataManager
-import com.example.silentguardian.service.MonitorService
-import com.example.silentguardian.utils.UpdateManager
+import com.yestek.silentguardian.R
+import com.yestek.silentguardian.manager.DataManager
+import com.yestek.silentguardian.service.MonitorService
+import com.yestek.silentguardian.utils.UpdateManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

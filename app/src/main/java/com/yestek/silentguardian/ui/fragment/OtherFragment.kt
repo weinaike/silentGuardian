@@ -1,4 +1,4 @@
-package com.example.silentguardian.ui.fragment
+package com.yestek.silentguardian.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +12,10 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.silentguardian.R
-import com.example.silentguardian.manager.DataManager
-import com.example.silentguardian.ui.AppSelectActivity
-import com.example.silentguardian.ui.PinLockActivity
+import com.yestek.silentguardian.R
+import com.yestek.silentguardian.manager.DataManager
+import com.yestek.silentguardian.ui.AppSelectActivity
+import com.yestek.silentguardian.ui.PinLockActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class OtherFragment : Fragment() {
@@ -92,7 +92,7 @@ class OtherFragment : Fragment() {
 
         view.findViewById<View>(R.id.cvVersion)?.setOnClickListener {
             Toast.makeText(requireContext(), "正在检查更新...", Toast.LENGTH_SHORT).show()
-            com.example.silentguardian.utils.UpdateManager.checkUpdate(requireActivity())
+            com.yestek.silentguardian.utils.UpdateManager.checkUpdate(requireActivity())
         }
         
         return view

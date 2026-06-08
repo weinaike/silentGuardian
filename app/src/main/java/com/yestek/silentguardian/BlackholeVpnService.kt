@@ -1,4 +1,4 @@
-package com.example.silentguardian
+package com.yestek.silentguardian
 
 import android.content.Intent
 import android.net.VpnService

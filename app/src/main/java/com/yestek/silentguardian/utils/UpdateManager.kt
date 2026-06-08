@@ -1,4 +1,4 @@
-package com.example.silentguardian.utils
+package com.yestek.silentguardian.utils
 
 import android.app.Activity
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.silentguardian.service
+package com.yestek.silentguardian.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,8 +14,8 @@ import android.os.IBinder
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.silentguardian.BlackholeVpnService
-import com.example.silentguardian.manager.DataManager
+import com.yestek.silentguardian.BlackholeVpnService
+import com.yestek.silentguardian.manager.DataManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

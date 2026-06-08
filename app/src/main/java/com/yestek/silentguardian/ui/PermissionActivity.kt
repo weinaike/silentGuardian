@@ -1,4 +1,4 @@
-package com.example.silentguardian.ui
+package com.yestek.silentguardian.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -15,8 +15,8 @@ import android.widget.Switch
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
-import com.example.silentguardian.R
-import com.example.silentguardian.receiver.AdminReceiver
+import com.yestek.silentguardian.R
+import com.yestek.silentguardian.receiver.AdminReceiver
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 
@@ -45,7 +45,7 @@ class PermissionActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission)
         
-        com.example.silentguardian.utils.UpdateManager.checkUpdate(this)
+        com.yestek.silentguardian.utils.UpdateManager.checkUpdate(this)
 
         llPermissions = findViewById(R.id.llPermissions)
         btnEnter = findViewById(R.id.btnEnter)
@@ -60,7 +60,7 @@ class PermissionActivity : Activity() {
             if (fromDashboard) {
                 finish()
             } else {
-                startActivity(Intent(this, com.example.silentguardian.MainActivity::class.java))
+                startActivity(Intent(this, com.yestek.silentguardian.MainActivity::class.java))
                 finish()
             }
         }
@@ -69,8 +69,8 @@ class PermissionActivity : Activity() {
     override fun onResume() {
         super.onResume()
         
-        if (com.example.silentguardian.manager.DataManager.appPinCode.isNotEmpty() && !com.example.silentguardian.manager.DataManager.isAppUnlocked) {
-            val intent = Intent(this, com.example.silentguardian.ui.PinLockActivity::class.java)
+        if (com.yestek.silentguardian.manager.DataManager.appPinCode.isNotEmpty() && !com.yestek.silentguardian.manager.DataManager.isAppUnlocked) {
+            val intent = Intent(this, com.yestek.silentguardian.ui.PinLockActivity::class.java)
             startActivity(intent)
             return
         }
@@ -85,8 +85,8 @@ class PermissionActivity : Activity() {
         val isDeviceAdmin = dpm.isAdminActive(componentName)
         
         if (allGranted && isDeviceAdmin && !fromDashboard) {
-            com.example.silentguardian.manager.DataManager.isServiceEnabled = true
-            startActivity(Intent(this, com.example.silentguardian.MainActivity::class.java))
+            com.yestek.silentguardian.manager.DataManager.isServiceEnabled = true
+            startActivity(Intent(this, com.yestek.silentguardian.MainActivity::class.java))
             finish()
         }
     }

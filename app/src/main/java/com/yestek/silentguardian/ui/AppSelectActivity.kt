@@ -1,4 +1,4 @@
-package com.example.silentguardian.ui
+package com.yestek.silentguardian.ui
 
 import android.app.Activity
 import android.os.Bundle
@@ -7,8 +7,8 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
-import com.example.silentguardian.R
-import com.example.silentguardian.manager.DataManager
+import com.yestek.silentguardian.R
+import com.yestek.silentguardian.manager.DataManager
 
 class AppSelectActivity : Activity() {
 
@@ -98,8 +98,8 @@ class AppSelectActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        if (com.example.silentguardian.manager.DataManager.appPinCode.isNotEmpty() && !com.example.silentguardian.manager.DataManager.isAppUnlocked) {
-            val intent = android.content.Intent(this, com.example.silentguardian.ui.PinLockActivity::class.java)
+        if (com.yestek.silentguardian.manager.DataManager.appPinCode.isNotEmpty() && !com.yestek.silentguardian.manager.DataManager.isAppUnlocked) {
+            val intent = android.content.Intent(this, com.yestek.silentguardian.ui.PinLockActivity::class.java)
             startActivity(intent)
             return
         }

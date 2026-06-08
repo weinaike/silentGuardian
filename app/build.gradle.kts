@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.silentguardian"
+    namespace = "com.yestek.silentguardian"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.silentguardian"
+        applicationId = "com.yestek.silentguardian"
         minSdk = 24
         targetSdk = 34
         versionCode = 5
