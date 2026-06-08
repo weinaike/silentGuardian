@@ -7,10 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.silentguardian.R
+import com.example.silentguardian.manager.DataManager
+import com.example.silentguardian.ui.AppSelectActivity
+import com.example.silentguardian.ui.PinLockActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class OtherFragment : Fragment() {
 
@@ -46,7 +52,7 @@ class OtherFragment : Fragment() {
         }
         
         view.findViewById<View>(R.id.cvModifyPin)?.setOnClickListener {
-            val intent = Intent(requireContext(), com.example.silentguardian.ui.PinLockActivity::class.java).apply {
+            val intent = Intent(requireContext(), PinLockActivity::class.java).apply {
                 putExtra("MODIFY_MODE", true)
             }
             startActivity(intent)
@@ -57,7 +63,7 @@ class OtherFragment : Fragment() {
         }
 
         view.findViewById<View>(R.id.cvManageApps)?.setOnClickListener {
-            startActivity(Intent(requireContext(), com.example.silentguardian.ui.AppSelectActivity::class.java))
+            startActivity(Intent(requireContext(), AppSelectActivity::class.java))
         }
         
         return view
@@ -65,66 +71,66 @@ class OtherFragment : Fragment() {
 
 
     private fun showSettingsDialog() {
-        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.layout_dialog_settings, null)
         dialog.setContentView(view)
 
-        val tvDailyLimit = view.findViewById<android.widget.TextView>(R.id.tvDailyLimit)
-        val sbDailyLimit = view.findViewById<android.widget.SeekBar>(R.id.sbDailyLimit)
-        val tvContinuousLimit = view.findViewById<android.widget.TextView>(R.id.tvContinuousLimit)
-        val sbContinuousLimit = view.findViewById<android.widget.SeekBar>(R.id.sbContinuousLimit)
-        val tvCooldown = view.findViewById<android.widget.TextView>(R.id.tvCooldown)
-        val sbCooldown = view.findViewById<android.widget.SeekBar>(R.id.sbCooldown)
+        val tvDailyLimit = view.findViewById<TextView>(R.id.tvDailyLimit)
+        val sbDailyLimit = view.findViewById<SeekBar>(R.id.sbDailyLimit)
+        val tvContinuousLimit = view.findViewById<TextView>(R.id.tvContinuousLimit)
+        val sbContinuousLimit = view.findViewById<SeekBar>(R.id.sbContinuousLimit)
+        val tvCooldown = view.findViewById<TextView>(R.id.tvCooldown)
+        val sbCooldown = view.findViewById<SeekBar>(R.id.sbCooldown)
 
         sbDailyLimit.max = 47 // (480 - 10) / 10
-        sbDailyLimit.progress = ((com.example.silentguardian.manager.DataManager.dailyTotalLimitMinutes - 10) / 10).coerceIn(0, 47)
-        tvDailyLimit.text = "${com.example.silentguardian.manager.DataManager.dailyTotalLimitMinutes} 分钟"
+        sbDailyLimit.progress = ((DataManager.dailyTotalLimitMinutes - 10) / 10).coerceIn(0, 47)
+        tvDailyLimit.text = "${DataManager.dailyTotalLimitMinutes} 分钟"
 
-        sbDailyLimit.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+        sbDailyLimit.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mins = 10 + progress * 10
                 tvDailyLimit.text = "$mins 分钟"
             }
-            override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val progress = seekBar?.progress ?: 0
-                com.example.silentguardian.manager.DataManager.dailyTotalLimitMinutes = 10 + progress * 10
+                DataManager.dailyTotalLimitMinutes = 10 + progress * 10
             }
         })
         
         sbContinuousLimit.max = 35 // (180 - 5) / 5
-        sbContinuousLimit.progress = ((com.example.silentguardian.manager.DataManager.continuousLimitMinutes - 5) / 5).coerceIn(0, 35)
-        tvContinuousLimit.text = "${com.example.silentguardian.manager.DataManager.continuousLimitMinutes} 分钟"
+        sbContinuousLimit.progress = ((DataManager.continuousLimitMinutes - 5) / 5).coerceIn(0, 35)
+        tvContinuousLimit.text = "${DataManager.continuousLimitMinutes} 分钟"
 
-        sbContinuousLimit.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+        sbContinuousLimit.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mins = 5 + progress * 5
                 tvContinuousLimit.text = "$mins 分钟"
             }
-            override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val progress = seekBar?.progress ?: 0
-                com.example.silentguardian.manager.DataManager.continuousLimitMinutes = 5 + progress * 5
+                DataManager.continuousLimitMinutes = 5 + progress * 5
             }
         })
         
         sbCooldown.max = 59 // (60 - 1) / 1
-        sbCooldown.progress = ((com.example.silentguardian.manager.DataManager.cooldownMinutes - 1) / 1).coerceIn(0, 59)
-        tvCooldown.text = "${com.example.silentguardian.manager.DataManager.cooldownMinutes} 分钟"
+        sbCooldown.progress = ((DataManager.cooldownMinutes - 1) / 1).coerceIn(0, 59)
+        tvCooldown.text = "${DataManager.cooldownMinutes} 分钟"
 
-        sbCooldown.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+        sbCooldown.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mins = 1 + progress
                 tvCooldown.text = "$mins 分钟"
             }
-            override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val progress = seekBar?.progress ?: 0
-                com.example.silentguardian.manager.DataManager.cooldownMinutes = 1 + progress
+                DataManager.cooldownMinutes = 1 + progress
             }
         })
 
-        view.findViewById<android.widget.Button>(R.id.btnSaveSettings).setOnClickListener {
+        view.findViewById<Button>(R.id.btnSaveSettings).setOnClickListener {
             dialog.dismiss()
             Toast.makeText(requireContext(), "健康防沉迷规则已保存", Toast.LENGTH_SHORT).show()
         }

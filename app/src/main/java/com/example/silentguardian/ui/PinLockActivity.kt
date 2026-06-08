@@ -6,15 +6,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.silentguardian.MainActivity
 import com.example.silentguardian.R
 import com.example.silentguardian.manager.DataManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PinLockActivity : Activity() {
+class PinLockActivity : AppCompatActivity() {
 
     private var currentPin = ""
     private var isSettingMode = false
@@ -96,7 +96,7 @@ class PinLockActivity : Activity() {
     }
 
     private fun handlePinComplete() {
-        CoroutineScope(Dispatchers.Main).launch {
+        lifecycleScope.launch {
             delay(100) // Small delay so user sees the 4th dot fill up
             
             if (isSettingMode) {

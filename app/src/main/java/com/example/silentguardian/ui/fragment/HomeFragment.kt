@@ -41,7 +41,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        UpdateManager.checkUpdate(requireActivity())
         
         switchService = view.findViewById(R.id.switchService)
         tvServiceStatus = view.findViewById(R.id.tvServiceStatus)
@@ -68,9 +67,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-
-        // Removed settings logic from Home, it's now in Permission/Other tabs.
-        
         return view
     }
 
@@ -153,8 +149,8 @@ class HomeFragment : Fragment() {
         
         lifecycleScope.launch {
             while (isRefreshing) {
-                var totalUsedSecs = DataManager.getGlobalUsedSecondsToday()
-                var totalLimitSecs = DataManager.dailyTotalLimitMinutes * 60
+                val totalUsedSecs = DataManager.getGlobalUsedSecondsToday()
+                val totalLimitSecs = DataManager.dailyTotalLimitMinutes * 60
                 
                 val totalMin = totalUsedSecs / 60
                 val totalSec = totalUsedSecs % 60
@@ -192,7 +188,7 @@ class HomeFragment : Fragment() {
     private fun updateSessionUI() {
         val totalUsedSecs = DataManager.getGlobalUsedSecondsToday()
         val totalLimitSecs = DataManager.dailyTotalLimitMinutes * 60
-        val isTotalExhausted = totalUsedSecs >= totalLimitSecs
+        val isTotalExhausted = totalLimitSecs > 0 && totalUsedSecs >= totalLimitSecs
         
         if (isTotalExhausted) {
             llSessionCard.setBackgroundColor(android.graphics.Color.parseColor("#FFF3E0"))
