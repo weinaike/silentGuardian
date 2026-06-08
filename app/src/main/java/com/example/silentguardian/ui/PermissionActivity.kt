@@ -68,6 +68,13 @@ class PermissionActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        
+        if (com.example.silentguardian.manager.DataManager.appPinCode.isNotEmpty() && !com.example.silentguardian.manager.DataManager.isAppUnlocked) {
+            val intent = Intent(this, com.example.silentguardian.ui.PinLockActivity::class.java)
+            startActivity(intent)
+            return
+        }
+
         checkPermissions()
         updateDeviceAdminState()
         

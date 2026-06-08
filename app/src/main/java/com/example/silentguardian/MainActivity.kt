@@ -44,4 +44,12 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.nav_host_fragment, fragment)
             .commit()
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (com.example.silentguardian.manager.DataManager.appPinCode.isEmpty() || !com.example.silentguardian.manager.DataManager.isAppUnlocked) {
+            val intent = android.content.Intent(this, com.example.silentguardian.ui.PinLockActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }

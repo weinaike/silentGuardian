@@ -10,7 +10,16 @@ object DataManager {
 
     var isServiceEnabled: Boolean
         get() = kv.decodeBool("isServiceEnabled", false)
-        set(value) { kv.encode("isServiceEnabled", value) }
+        set(value) {
+            val oldValue = kv.decodeBool("isServiceEnabled", false)
+            if (oldValue != value) {
+                // 方案 C: 当守护服务被重新开启时，清空所有当天的统计数据，重头开始
+                if (value) {
+                    clearAllUsageData()
+                }
+                kv.encode("isServiceEnabled", value)
+            }
+        }
 
     var managedApps: Set<String>
         get() = kv.decodeStringSet("managedApps", emptySet()) ?: emptySet()
@@ -35,7 +44,21 @@ object DataManager {
 
     var cooldownMinutes: Int
         get() = kv.decodeInt("cooldownMinutes", 20)
-        set(value) { kv.encode("cooldownMinutes", value) }
+        set(value) {
+            val old = kv.decodeInt("cooldownMinutes", 20)
+            kv.encode("cooldownMinutes", value)
+            // 如果当前正在冷却期中，按新时长重新计算截止时间，防止"改短规则仍按旧时长倒计时"的 bug
+            val currentEnd = kv.decodeLong("cooldownEndTime", 0L)
+            val now = System.currentTimeMillis()
+            if (currentEnd > now) {
+                // 冷却开始时间 = 旧截止时间 - 旧冷却时长
+                val cooldownStart = currentEnd - (old * 60_000L)
+                // 用旧开始时间 + 新时长重新计算截止时间
+                val newEnd = cooldownStart + (value * 60_000L)
+                // 如果新截止时间已经过去，直接清除冷却
+                kv.encode("cooldownEndTime", if (newEnd > now) newEnd else 0L)
+            }
+        }
 
     // Phase 4: Session State
     var currentSessionSeconds: Int
@@ -55,16 +78,18 @@ object DataManager {
 
     fun getGlobalUsedSecondsToday(): Int {
         checkAndResetCrossDay()
-        return kv.decodeInt("globalUsedSecondsToday", 0)
+        // 从各 App 的已用秒数求和派生，避免与独立计数器脱钩
+        var total = 0
+        managedApps.forEach { pkg ->
+            total += kv.decodeInt("used_$pkg", 0)
+        }
+        return total
     }
 
-    private var lastRecordDate: String
-        get() = kv.decodeString("lastRecordDate", "") ?: ""
-        set(value) { kv.encode("lastRecordDate", value) }
-
-    private fun getTodayDateString(): String {
-        return SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-    }
+    // 计时引擎结算时间戳，持久化以支持服务重启后续算
+    var lastSettledTimestamp: Long
+        get() = kv.decodeLong("lastSettledTimestamp", 0L)
+        set(value) { kv.encode("lastSettledTimestamp", value) }
 
     fun getAppUsedSecondsToday(pkgName: String): Int {
         checkAndResetCrossDay()
@@ -75,10 +100,7 @@ object DataManager {
         checkAndResetCrossDay()
         val current = getAppUsedSecondsToday(pkgName)
         kv.encode("used_$pkgName", current + seconds)
-        
-        // Also update global tracking independently
-        val currentGlobal = kv.decodeInt("globalUsedSecondsToday", 0)
-        kv.encode("globalUsedSecondsToday", currentGlobal + seconds)
+        // 全局秒数由 getGlobalUsedSecondsToday() 从各 App 求和派生，无需独立维护
     }
 
     fun getAppScreenSecondsToday(pkgName: String): Int {
@@ -103,12 +125,6 @@ object DataManager {
         kv.encode("call_$pkgName", current + seconds)
     }
 
-    fun getAppUsedMinutesToday(pkgName: String): Int {
-        return getAppUsedSecondsToday(pkgName) / 60
-    }
-
-    // --- Private / Inner Methods ---
-
     private fun checkAndResetCrossDay() {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val todayStr = sdf.format(Date())
@@ -116,15 +132,20 @@ object DataManager {
         
         if (lastRecordDate != todayStr) {
             // It's a new day! Reset all individual app used times
-            managedApps.forEach { pkg ->
-                kv.removeValueForKey("used_$pkg")
-                kv.removeValueForKey("screen_$pkg")
-                kv.removeValueForKey("call_$pkg")
-            }
-            kv.removeValueForKey("globalUsedSecondsToday")
-            kv.removeValueForKey("currentSessionSeconds")
-            kv.removeValueForKey("cooldownEndTime")
+            clearAllUsageData()
             kv.encode("last_record_date", todayStr)
         }
+    }
+
+    fun clearAllUsageData() {
+        managedApps.forEach { pkg ->
+            kv.removeValueForKey("used_$pkg")
+            kv.removeValueForKey("screen_$pkg")
+            kv.removeValueForKey("call_$pkg")
+        }
+        kv.removeValueForKey("currentSessionSeconds")
+        kv.removeValueForKey("cooldownEndTime")
+        // 将结算时间戳设为当前时间，防止重启服务后追溯历史或从 0 计算
+        lastSettledTimestamp = System.currentTimeMillis()
     }
 }

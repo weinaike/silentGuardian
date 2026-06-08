@@ -95,4 +95,13 @@ class AppSelectActivity : Activity() {
             finish()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (com.example.silentguardian.manager.DataManager.appPinCode.isNotEmpty() && !com.example.silentguardian.manager.DataManager.isAppUnlocked) {
+            val intent = android.content.Intent(this, com.example.silentguardian.ui.PinLockActivity::class.java)
+            startActivity(intent)
+            return
+        }
+    }
 }

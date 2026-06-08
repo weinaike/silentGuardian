@@ -126,6 +126,7 @@ class MonitorService : Service() {
         // 最后一次事件是 START(19) → 说明前台服务目前仍在运行
         for ((pkg, eventType) in latestFgEvent) {
             if (eventType == 19) {
+                // 注意：这里保存的是 raw package name，供后续独立状态追踪使用
                 activeFgServices.add(pkg)
                 Log.d(TAG, "Restored active fg service on start: $pkg")
             }
@@ -267,8 +268,8 @@ class MonitorService : Service() {
         val queryStart = DataManager.lastSettledTimestamp
         val events = usm.queryEvents(queryStart, currentTime)
 
-        // 收集事件，按包名分组
-        data class TimedEvent(val packageName: String, val eventType: Int, val timestamp: Long)
+        // 收集事件，包含原始包名与规范包名
+        data class TimedEvent(val rawPackageName: String, val canonicalPkg: String, val eventType: Int, val timestamp: Long)
 
         val eventList = mutableListOf<TimedEvent>()
         while (events.hasNextEvent()) {
@@ -281,77 +282,80 @@ class MonitorService : Service() {
                 // ACTIVITY_PAUSED = 2, END_OF_DAY = 3, ACTIVITY_STOPPED = 23, ACTIVITY_DESTROYED = 24
                 // FOREGROUND_SERVICE_START = 19, FOREGROUND_SERVICE_STOP = 20
                 if (type == 1 || type == 2 || type == 3 || type == 23 || type == 24 || type == 19 || type == 20) {
-                    eventList.add(TimedEvent(canonicalPkg, type, e.timeStamp))
+                    eventList.add(TimedEvent(e.packageName, canonicalPkg, type, e.timeStamp))
                 }
             }
         }
 
         // 用状态机为每个 App 计算前台时长
-        // 追踪当前哪个 App 在前台（同一时刻只有一个）
-        var currentFgApp: String? = null
+        // 追踪当前哪个 App 在前台（同一时刻只有一个），使用 rawPackageName 避免别名组件互相覆盖
+        var currentFgAppRaw: String? = null
         var currentFgStartTime = 0L
-        val appDurations = mutableMapOf<String, Long>() // 包名 → 本轮新增毫秒数
+        val appDurations = mutableMapOf<String, Long>() // rawPackageName → 本轮新增毫秒数
 
         // 先确定 queryStart 时刻的初始前台 App（通过查询更早的事件）
-        val initialFg = findForegroundAppAt(queryStart)
-        if (initialFg != null && initialFg in managedApps) {
-            currentFgApp = initialFg
-            currentFgStartTime = queryStart
+        val initialFgRaw = findForegroundAppAt(queryStart)
+        if (initialFgRaw != null) {
+            val canonicalInitial = packageAliases.getOrDefault(initialFgRaw, initialFgRaw)
+            if (canonicalInitial in managedApps) {
+                currentFgAppRaw = initialFgRaw
+                currentFgStartTime = queryStart
+            }
         }
 
         for (event in eventList) {
             when {
                 event.eventType == 1 -> {
                     // 某个 App 进入前台，先结算之前的前台 App
-                    val prevFg = currentFgApp
-                    if (prevFg != null && prevFg in managedApps) {
+                    val prevFgRaw = currentFgAppRaw
+                    if (prevFgRaw != null) {
                         val duration = event.timestamp - currentFgStartTime
                         if (duration > 0) {
-                            appDurations[prevFg] = (appDurations[prevFg] ?: 0L) + duration
+                            appDurations[prevFgRaw] = (appDurations[prevFgRaw] ?: 0L) + duration
                         }
                     }
-                    currentFgApp = event.packageName
+                    currentFgAppRaw = event.rawPackageName
                     currentFgStartTime = event.timestamp
                 }
                 event.eventType == 2 || event.eventType == 3 || event.eventType == 23 || event.eventType == 24 -> {
-                    // 某个 App 离开前台
-                    val prevFg = currentFgApp
-                    if (prevFg == event.packageName) {
+                    // 某个 App 离开前台。必须是确切的那个 rawPackageName 才能触发停止
+                    if (currentFgAppRaw == event.rawPackageName) {
                         val duration = event.timestamp - currentFgStartTime
                         if (duration > 0) {
-                            appDurations[prevFg] = (appDurations[prevFg] ?: 0L) + duration
+                            appDurations[currentFgAppRaw] = (appDurations[currentFgAppRaw] ?: 0L) + duration
                         }
-                        currentFgApp = null
+                        currentFgAppRaw = null
                     }
                 }
                 event.eventType == 19 -> {
-                    activeFgServices.add(event.packageName)
+                    activeFgServices.add(event.rawPackageName)
                 }
                 event.eventType == 20 -> {
-                    activeFgServices.remove(event.packageName)
+                    activeFgServices.remove(event.rawPackageName)
                 }
             }
         }
 
         // 如果当前仍有受管 App 在前台，算到 currentTime
         var isAnyActive = false
-        val finalFg = currentFgApp
-        if (finalFg != null && finalFg in managedApps) {
+        val finalFgRaw = currentFgAppRaw
+        if (finalFgRaw != null) {
             val duration = currentTime - currentFgStartTime
             if (duration > 0) {
-                appDurations[finalFg] = (appDurations[finalFg] ?: 0L) + duration
+                appDurations[finalFgRaw] = (appDurations[finalFgRaw] ?: 0L) + duration
             }
-            isAnyActive = true
         }
 
         // 写入 DataManager
         var totalNewSeconds = 0
-        for ((pkg, durationMs) in appDurations) {
+        for ((rawPkg, durationMs) in appDurations) {
             val secs = (durationMs / 1000).toInt()
             if (secs > 0) {
-                DataManager.addAppScreenSeconds(pkg, secs)
-                DataManager.addAppUsedSeconds(pkg, secs)
+                val canonicalPkg = packageAliases.getOrDefault(rawPkg, rawPkg)
+                DataManager.addAppScreenSeconds(canonicalPkg, secs)
+                DataManager.addAppUsedSeconds(canonicalPkg, secs)
                 totalNewSeconds += secs
+                isAnyActive = true
             }
         }
 
@@ -383,11 +387,11 @@ class MonitorService : Service() {
             eventList.add(e)
         }
 
-        // 倒序找最近的 RESUMED（确定当时的前台 App）
+        // 倒序找最近的 RESUMED（确定当时的前台 App），返回 rawPackageName
         for (i in eventList.indices.reversed()) {
             val e = eventList[i]
             if (e.eventType == 1) {
-                return packageAliases.getOrDefault(e.packageName, e.packageName)
+                return e.packageName
             }
             // 如果先遇到离开前台的事件，说明那一刻没有 App 在前台（或在桌面）
             if (e.eventType == 2 || e.eventType == 3 || e.eventType == 23 || e.eventType == 24) {
@@ -411,7 +415,10 @@ class MonitorService : Service() {
         var isAnyActive = false
 
         // 根据最新状态，刷新所有仍活跃的前台服务对应的会话
-        for (pkg in activeFgServices) {
+        // activeFgServices 里面存放的是 rawPackageName，需要先映射回 canonical
+        val activeCanonicalServices = activeFgServices.map { packageAliases.getOrDefault(it, it) }.toSet()
+
+        for (pkg in activeCanonicalServices) {
             val session = voiceSessions[pkg]
             if (session != null) {
                 session.lastPlaybackTime = currentTime
