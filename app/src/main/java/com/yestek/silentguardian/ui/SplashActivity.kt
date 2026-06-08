@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
     private fun showPrivacyDialog() {
         AlertDialog.Builder(this)
             .setTitle("用户协议与隐私政策")
-            .setMessage("欢迎使用 SilentGuardian！\n\n我们非常重视您的隐私保护。在您使用本应用前，请仔细阅读以下内容：\n\n1. 本应用需要获取您的“应用使用时间（Usage Stats）”权限以计算防沉迷时间。\n2. 本应用需要使用“本地 VPN 服务 (VpnService)”来在额度耗尽时阻断网络，此 VPN 仅在设备本地运行，绝对不会收集或上传您的任何流量数据。\n3. 所有数据（包括使用时间、应用列表）均仅存储于您的设备本地，不涉及任何云端上传。\n\n请点击“同意”开始使用。")
+            .setMessage(com.yestek.silentguardian.utils.PrivacyPolicyConstants.POLICY_TEXT)
             .setCancelable(false)
             .setPositiveButton("同意") { _, _ ->
                 getSharedPreferences("app_config", Context.MODE_PRIVATE).edit().putBoolean("is_privacy_accepted", true).apply()

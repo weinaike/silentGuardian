@@ -66,33 +66,8 @@ class OtherFragment : Fragment() {
             startActivity(Intent(requireContext(), AppSelectActivity::class.java))
         }
 
-        view.findViewById<View>(R.id.cvPrivacy)?.setOnClickListener {
-            androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("用户协议与隐私政策")
-                .setMessage("撤回隐私协议同意将停止所有数据记录，并清空本地存储，App 将退出且不可用直到您再次同意。\n\n您确定要撤回同意吗？")
-                .setPositiveButton("撤回同意并退出") { _, _ ->
-                    requireContext().getSharedPreferences("app_config", android.content.Context.MODE_PRIVATE)
-                        .edit().putBoolean("is_privacy_accepted", false).apply()
-                    DataManager.clearAllUsageData()
-                    DataManager.managedApps = emptySet()
-                    requireActivity().finishAffinity()
-                    kotlin.system.exitProcess(0)
-                }
-                .setNegativeButton("取消", null)
-                .show()
-        }
-
-        val tvVersionTitle = view.findViewById<TextView>(R.id.tvVersionTitle)
-        val appVersionName = try {
-            requireContext().packageManager.getPackageInfo(requireContext().packageName, 0).versionName
-        } catch (e: Exception) {
-            "Unknown"
-        }
-        tvVersionTitle?.text = "检查更新 (v$appVersionName)"
-
-        view.findViewById<View>(R.id.cvVersion)?.setOnClickListener {
-            Toast.makeText(requireContext(), "正在检查更新...", Toast.LENGTH_SHORT).show()
-            com.yestek.silentguardian.utils.UpdateManager.checkUpdate(requireActivity())
+        view.findViewById<View>(R.id.cvAbout)?.setOnClickListener {
+            showAboutDialog()
         }
         
         return view
@@ -162,6 +137,54 @@ class OtherFragment : Fragment() {
         view.findViewById<Button>(R.id.btnSaveSettings).setOnClickListener {
             dialog.dismiss()
             Toast.makeText(requireContext(), "健康防沉迷规则已保存", Toast.LENGTH_SHORT).show()
+        }
+
+        dialog.show()
+    }
+
+    private fun showAboutDialog() {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.layout_dialog_about, null)
+        dialog.setContentView(view)
+
+        view.findViewById<View>(R.id.llViewPrivacy)?.setOnClickListener {
+            dialog.dismiss()
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("用户协议与隐私政策")
+                .setMessage(com.yestek.silentguardian.utils.PrivacyPolicyConstants.POLICY_TEXT)
+                .setPositiveButton("已阅", null)
+                .show()
+        }
+
+        view.findViewById<View>(R.id.llWithdrawPrivacy)?.setOnClickListener {
+            dialog.dismiss()
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("撤回隐私协议授权")
+                .setMessage("撤回隐私协议同意将停止所有数据记录，并清空本地存储，App 将退出且不可用直到您再次同意。\n\n您确定要撤回同意吗？")
+                .setPositiveButton("撤回同意并退出") { _, _ ->
+                    requireContext().getSharedPreferences("app_config", android.content.Context.MODE_PRIVATE)
+                        .edit().putBoolean("is_privacy_accepted", false).apply()
+                    DataManager.clearAllUsageData()
+                    DataManager.managedApps = emptySet()
+                    requireActivity().finishAffinity()
+                    kotlin.system.exitProcess(0)
+                }
+                .setNegativeButton("取消", null)
+                .show()
+        }
+
+        val tvAboutVersion = view.findViewById<TextView>(R.id.tvAboutVersion)
+        val appVersionName = try {
+            requireContext().packageManager.getPackageInfo(requireContext().packageName, 0).versionName
+        } catch (e: Exception) {
+            "Unknown"
+        }
+        tvAboutVersion?.text = "检查更新 (当前版本 v$appVersionName)"
+
+        view.findViewById<View>(R.id.llCheckUpdate)?.setOnClickListener {
+            dialog.dismiss()
+            Toast.makeText(requireContext(), "正在检查更新...", Toast.LENGTH_SHORT).show()
+            com.yestek.silentguardian.utils.UpdateManager.checkUpdate(requireActivity())
         }
 
         dialog.show()

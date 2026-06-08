@@ -200,9 +200,9 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- 隐私协议合规大横幅 -->
+        <!-- 关于大横幅 -->
         <LinearLayout
-            android:id="@+id/cvPrivacy"
+            android:id="@+id/cvAbout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -217,7 +217,7 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@android:drawable/ic_menu_info_details"
+                android:src="@android:drawable/ic_dialog_info"
                 android:tint="#4CAF50"/>
 
             <LinearLayout
@@ -230,7 +230,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="用户协议与隐私政策"
+                    android:text="关于"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -238,53 +238,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="查看合规声明或撤回权限同意"
-                    android:textColor="@color/text_hint"
-                    android:textSize="13sp"
-                    android:layout_marginTop="4dp"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 版本更新大横幅 -->
-        <LinearLayout
-            android:id="@+id/cvVersion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_card_surface"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@android:drawable/ic_popup_sync"
-                android:tint="#FF9800"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="16dp">
-
-                <TextView
-                    android:id="@+id/tvVersionTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="检查更新"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="检查云端是否有新版本可用"
+                    android:text="隐私政策、用户协议与版本更新"
                     android:textColor="@color/text_hint"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>
