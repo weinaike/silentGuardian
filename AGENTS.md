@@ -53,3 +53,10 @@
 5. **Phase 2 (进阶)**: 加入防卸载（设备管理器）、防杀后台报警以及针对单一 App 颗粒度管控。
 
 > **终极提示**: 遇到不确定的业务逻辑或权限兼容盲区，请向人类提问确认，切勿自行脑补并编写大量不可控的冗余代码！
+
+## 6. 发布与配置更新 (Deployment & Configuration)
+
+为了统一下发更新配置与分发包，遵循以下维护规范：
+- **APK 发布位置**: 定期将构建好的 apk 包上传至阿里云服务器 `admin@47.237.161.121` 的 `/home/admin/gost/brand/apk` 目录下。
+- **配置维护 (Submodule)**: 本地通过引入子模块 `gitee_release` 统一管理和更新发布配置。该配置项目位于 `https://gitee.com/weinaike/silentGuardian`，重点维护其中的 `update_config.json` 文件以触发端侧更新。
+- **Gitee Token 凭据**: 更新配置仓库时需要鉴权。请使用 Git 的 Credential Helper 进行本地持久化保存，或者在部署前配置环境变量。严禁将私人 Token 明文提交到任何文档或代码中！
