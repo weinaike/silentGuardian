@@ -167,7 +167,7 @@ class PermissionActivity : Activity() {
             "usage" -> {
                 androidx.appcompat.app.AlertDialog.Builder(this)
                     .setTitle("授权引导")
-                    .setMessage("接下来将跳转至「使用情况访问权限」设置。\n\n为了能够准确判断您当前是否正在使用受管 App，请在接下来的列表中找到「SilentGuardian」，并将其状态修改为【允许访问使用记录】。")
+                    .setMessage("接下来将跳转至「使用情况访问权限」设置。\n\n为了能够准确判断您当前是否正在使用受管 App，请在接下来的列表中找到「AI 语音锁」，并将其状态修改为【允许访问使用记录】。")
                     .setPositiveButton("去设置") { _, _ ->
                         XXPermissions.with(this)
                             .permission(Permission.PACKAGE_USAGE_STATS)

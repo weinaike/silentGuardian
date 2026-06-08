@@ -1,7 +1,7 @@
 package com.yestek.silentguardian.utils
 
 object PrivacyPolicyConstants {
-    const val POLICY_TEXT = """欢迎使用 SilentGuardian（AI语音陪伴防沉迷系统，以下简称“本应用”）！
+    const val POLICY_TEXT = """欢迎使用 AI 语音锁（AI语音陪伴防沉迷系统，以下简称“本应用”）！
 我们深知个人信息对您的重要性，并庄重承诺保护您的隐私安全。在使用本应用前，请您务必仔细阅读并透彻理解本《用户协议与隐私政策》。
 
 1. 我们如何收集和使用您的信息
