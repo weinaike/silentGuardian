@@ -60,3 +60,54 @@
 - **APK 发布位置**: 定期将构建好的 apk 包上传至阿里云服务器 `admin@47.237.161.121` 的 `/home/admin/gost/brand/apk` 目录下。
 - **配置维护 (Submodule)**: 本地通过引入子模块 `gitee_release` 统一管理和更新发布配置。该配置项目位于 `https://gitee.com/weinaike/silentGuardian`，重点维护其中的 `update_config.json` 文件以触发端侧更新。
 - **Gitee Token 凭据**: 更新配置仓库时需要鉴权。请使用 Git 的 Credential Helper 进行本地持久化保存，或者在部署前配置环境变量。严禁将私人 Token 明文提交到任何文档或代码中！
+
+### 6.1 发版标准流程（每次发布必须严格按此步骤执行）
+
+> **核心原则**：一切通过 `deploy.sh` 完成，禁止手动 scp 或手动修改 `update_config.json`。
+
+**第一步：更新版本号**
+
+修改 `app/build.gradle.kts` 中的两个字段：
+```kotlin
+versionCode = <上一次 + 1>       // 整数，每次递增
+versionName = "<major.minor.patch>"  // 语义化版本，如 0.1.5
+```
+
+**第二步：Commit 版本号变更**
+
+```bash
+git add app/build.gradle.kts
+git commit -m "chore: 发版 v<versionName>，升级版本号至 code=<versionCode>"
+```
+
+**第三步：执行一键部署脚本**
+
+```bash
+bash deploy.sh
+```
+
+脚本将自动完成以下所有操作：
+1. 读取 `build.gradle.kts` 中的版本号
+2. 执行 `gradle assembleRelease` 编译签名包
+3. `scp` 上传至阿里云 `/home/admin/gost/brand/apk/SilentGuardian_v<版本号>.apk`
+4. 自动更新 `gitee_release/update_config.json`（版本号 + 下载链接）
+5. `git commit` + `git push` 至 Gitee，触发端侧检查更新
+
+**第四步（可选）：将主仓库 tag 打上**
+
+```bash
+git tag v<versionName>
+git push origin v<versionName>
+```
+
+### 6.2 update_config.json 字段说明
+
+| 字段 | 说明 |
+|------|------|
+| `latestVersionCode` | 与 `build.gradle.kts` 中 `versionCode` 保持一致 |
+| `latestVersionName` | 与 `build.gradle.kts` 中 `versionName` 保持一致 |
+| `forceUpdate` | `true` 表示强制更新，用户无法跳过；一般设为 `false` |
+| `updateTitle` | 更新弹窗标题，建议写 `发现新版本 v<版本号>` |
+| `updateMessage` | 更新日志，支持 `\n` 换行，列出本版本改动要点 |
+| `downloadUrl` | APK 下载直链，格式固定为 `https://www.yes-tek.com/asset/apk/SilentGuardian_v<版本号>.apk` |
+
