@@ -28,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         val sp = getSharedPreferences("app_config", Context.MODE_PRIVATE)
         val isPrivacyAccepted = sp.getBoolean("is_privacy_accepted", false)
 
@@ -44,7 +44,7 @@ class SplashActivity : AppCompatActivity() {
             val adConfig = withTimeoutOrNull(2000L) {
                 AdManager.fetchSplashAdConfig()
             }
-            
+
             if (adConfig != null && adConfig.enabled && adConfig.adUrl.isNotEmpty()) {
                 showAdAndStartCountdown(adConfig.adUrl, adConfig.durationSeconds)
             } else {
@@ -55,10 +55,10 @@ class SplashActivity : AppCompatActivity() {
 
     private fun showAdAndStartCountdown(url: String, duration: Int) {
         setContentView(R.layout.activity_splash)
-        
+
         val webView = findViewById<WebView>(R.id.webViewAd)
         val tvSkipAd = findViewById<TextView>(R.id.tvSkipAd)
-        
+
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -67,18 +67,18 @@ class SplashActivity : AppCompatActivity() {
             }
         }
         webView.webChromeClient = WebChromeClient()
-        
+
         webView.loadUrl(url)
-        
+
         tvSkipAd.visibility = View.VISIBLE
         tvSkipAd.setOnClickListener {
             countdownJob?.cancel()
             initAppAndStart()
         }
-        
+
         countdownJob = lifecycleScope.launch {
             for (i in duration downTo 1) {
-                tvSkipAd.text = "跳过 $i"
+                tvSkipAd.text = getString(R.string.splash_skip_count, i)
                 delay(1000)
             }
             initAppAndStart()
@@ -87,14 +87,14 @@ class SplashActivity : AppCompatActivity() {
 
     private fun showPrivacyDialog() {
         com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-            .setTitle("用户协议与隐私政策")
+            .setTitle(R.string.privacy_dialog_title)
             .setMessage(com.yestek.silentguardian.utils.PrivacyPolicyConstants.POLICY_TEXT)
             .setCancelable(false)
-            .setPositiveButton("同意") { _, _ ->
+            .setPositiveButton(R.string.btn_agree) { _, _ ->
                 getSharedPreferences("app_config", Context.MODE_PRIVATE).edit().putBoolean("is_privacy_accepted", true).apply()
                 checkAndShowAd()
             }
-            .setNegativeButton("不同意并退出") { _, _ ->
+            .setNegativeButton(R.string.btn_disagree_and_exit) { _, _ ->
                 finish()
             }
             .show()
@@ -103,7 +103,7 @@ class SplashActivity : AppCompatActivity() {
     private fun initAppAndStart() {
         if (isStarted) return
         isStarted = true
-        
+
         // 在用户同意后，才初始化第三方 SDK 和数据管理器
         MMKV.initialize(applicationContext)
 
@@ -118,7 +118,7 @@ class SplashActivity : AppCompatActivity() {
                 pm.getPackageInfo("com.tencent.hunyuan.app.chat", 0)
                 autoApps.add("com.tencent.hunyuan.app.chat")
             } catch (e: Exception) {}
-            
+
             if (autoApps.isNotEmpty()) {
                 val currentApps = com.yestek.silentguardian.manager.DataManager.managedApps.toMutableSet()
                 currentApps.addAll(autoApps)
@@ -126,7 +126,7 @@ class SplashActivity : AppCompatActivity() {
             }
             com.yestek.silentguardian.manager.DataManager.hasAutoInitializedApps = true
         }
-        
+
         // 判断是否需要引导权限
         val intent = if (!com.yestek.silentguardian.manager.DataManager.isServiceEnabled) {
             // 如果服务没开启，说明没走完权限流程（或者主动关了），跳权限引导

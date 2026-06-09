@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="设置"
+            android:text="@string/other_settings"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -50,7 +50,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="健康防沉迷规则"
+                    android:text="@string/other_anti_addiction_rules"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -58,7 +58,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="配置每日限额、单次使用及休息时长"
+                    android:text="@string/other_anti_addiction_desc"
                     android:textColor="@color/text_hint"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>
@@ -95,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="添加 / 管理应用"
+                    android:text="@string/other_manage_apps"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -103,7 +103,52 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="选择或取消需要受 AI 守护的应用"
+                    android:text="@string/other_manage_apps_desc"
+                    android:textColor="@color/text_hint"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 语言切换横幅 -->
+        <LinearLayout
+            android:id="@+id/cvLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_card_surface"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@android:drawable/ic_menu_sort_by_size"
+                android:tint="@color/primary"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/other_language"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/other_language_desc"
                     android:textColor="@color/text_hint"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>
@@ -140,7 +185,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="修改 PIN 密码"
+                    android:text="@string/other_modify_pin"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -148,7 +193,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="重新设置打开 AI 语音锁和修改设置的密码"
+                    android:text="@string/other_modify_pin_desc"
                     android:textColor="@color/text_hint"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>
@@ -185,7 +230,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="意见反馈"
+                    android:text="@string/other_feedback"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -193,7 +238,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="遇到了问题或有新想法？发送极客邮件告诉我们"
+                    android:text="@string/other_feedback_desc"
                     android:textColor="@color/text_hint"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>
@@ -230,7 +275,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="关于"
+                    android:text="@string/other_about"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -238,7 +283,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="隐私政策、用户协议与版本更新"
+                    android:text="@string/other_about_desc"
                     android:textColor="@color/text_hint"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>

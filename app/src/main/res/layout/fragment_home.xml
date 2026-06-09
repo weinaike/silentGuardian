@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Silent Guardian"
+                    android:text="@string/app_name_en"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="默默守护，健康对话"
+                    android:text="@string/app_slogan"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -65,7 +65,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="核心守护服务"
+                        android:text="@string/home_core_service"
                         android:textColor="@color/surface"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="正在默默守护中..."
+                    android:text="@string/home_status_guarding"
                     android:textColor="@color/service_status_text"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -103,7 +103,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📊 今日使用总览"
+                        android:text="@string/home_today_usage"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -121,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="/ 120 分钟"
+                        android:text="@string/home_daily_limit_suffix"
                         android:textColor="@color/text_hint"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -155,7 +155,7 @@
                         android:id="@+id/tvSessionTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="⏱️ 当前连续对话"
+                        android:text="@string/home_current_session"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -173,7 +173,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="/ 30 分钟"
+                        android:text="@string/home_daily_limit_suffix"
                         android:textColor="@color/text_hint"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -187,7 +187,7 @@
                     android:max="100"
                     android:progress="0"
                     android:progressDrawable="@drawable/bg_progress" />
-                    
+
                 <TextView
                     android:id="@+id/tvCooldownStatus"
                     android:layout_width="match_parent"
@@ -198,7 +198,7 @@
                     android:textStyle="bold"
                     android:textAlignment="center"
                     android:visibility="gone"
-                    android:text="强制休息中，剩余 15分30秒" />
+                    android:text="@string/home_forced_rest_template" />
             </LinearLayout>
 
 
@@ -213,7 +213,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="受守护的应用列表"
+                    android:text="@string/home_managed_apps"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -246,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="守护服务运行时，手机状态栏会显示🔑钥匙图标，这是 VPN 连接的正常现象。孩子可能会注意到。"
+                    android:text="@string/home_vpn_notice"
                     android:textColor="@color/notice_text"
                     android:textSize="12sp" />
             </LinearLayout>

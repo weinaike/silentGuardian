@@ -1,4 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App -->
     <string name="app_name">AI 语音锁</string>
+    <string name="app_slogan">默默守护，健康对话</string>
+    <string name="app_name_en">Silent Guardian</string>
+
+    <!-- Common buttons -->
+    <string name="btn_save">保存</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_agree">同意</string>
+    <string name="btn_disagree_and_exit">不同意并退出</string>
+    <string name="btn_go_settings">去设置</string>
+    <string name="btn_go_authorize">去授权</string>
+    <string name="btn_read">已阅</string>
+    <string name="btn_back">返回</string>
+    <string name="btn_save_settings">保存设置</string>
+    <string name="btn_update_now">立即更新</string>
+    <string name="btn_later">稍后</string>
+    <string name="btn_withdraw_and_exit">撤回同意并退出</string>
+
+    <!-- Splash -->
+    <string name="splash_skip">跳过</string>
+    <string name="splash_skip_count">跳过 %d</string>
+
+    <!-- Privacy -->
+    <string name="privacy_dialog_title">用户协议与隐私政策</string>
+
+    <!-- Home -->
+    <string name="home_core_service">核心守护服务</string>
+    <string name="home_status_guarding">正在默默守护中…</string>
+    <string name="home_status_running">运行中</string>
+    <string name="home_status_paused">已暂停</string>
+    <string name="home_today_usage">📊 今日使用总览</string>
+    <string name="home_daily_limit_suffix">/ %d 分钟</string>
+    <string name="home_current_session">⏱️ 当前连续对话</string>
+    <string name="home_forced_rest_template">强制休息中，剩余 %d分%d秒</string>
+    <string name="home_managed_apps">受守护的应用列表</string>
+    <string name="home_no_managed_apps">暂无受守护应用</string>
+    <string name="home_vpn_notice">守护服务运行时，手机状态栏会显示🔑钥匙图标，这是 VPN 连接的正常现象。孩子可能会注意到。</string>
+    <string name="home_quota_exhausted">今日额度已用尽</string>
+    <string name="home_come_back_tomorrow">明天再来吧！</string>
+    <string name="home_session_active">单次使用中</string>
+    <string name="home_forced_rest">强制休息中</string>
+    <string name="home_available">可使用状态</string>
+    <string name="home_rest_eyes">请放下手机休息一下眼睛</string>
+    <string name="home_remaining">(剩余)</string>
+    <string name="home_screen_time">亮屏</string>
+    <string name="home_call_time">通话</string>
+    <string name="home_app_usage_detail">(亮屏: %s | 通话: %s)</string>
+
+    <!-- Other / Settings page -->
+    <string name="other_settings">设置</string>
+    <string name="other_anti_addiction_rules">健康防沉迷规则</string>
+    <string name="other_anti_addiction_desc">配置每日限额、单次使用及休息时长</string>
+    <string name="other_manage_apps">添加 / 管理应用</string>
+    <string name="other_manage_apps_desc">选择或取消需要受 AI 守护的应用</string>
+    <string name="other_modify_pin">修改 PIN 密码</string>
+    <string name="other_modify_pin_desc">重新设置打开 AI 语音锁和修改设置的密码</string>
+    <string name="other_feedback">意见反馈</string>
+    <string name="other_feedback_desc">遇到了问题或有新想法？发送极客邮件告诉我们</string>
+    <string name="other_about">关于</string>
+    <string name="other_about_desc">隐私政策、用户协议与版本更新</string>
+    <string name="other_language">语言 / Language</string>
+    <string name="other_language_desc">跟随系统或手动切换语言</string>
+    <string name="other_language_system">跟随系统</string>
+    <string name="other_language_zh">简体中文</string>
+    <string name="other_language_en">English</string>
+
+    <!-- Permission page -->
+    <string name="perm_silent_guardian">静默守护</string>
+    <string name="perm_notification_title">通知栏常驻权限</string>
+    <string name="perm_notification_desc">保持守护服务在后台持续运行</string>
+    <string name="perm_usage_title">应用使用情况访问</string>
+    <string name="perm_usage_desc">用于判断当前是否在使用管控应用</string>
+    <string name="perm_battery_title">忽略电池优化</string>
+    <string name="perm_battery_desc">防止系统为省电而关闭守护服务</string>
+    <string name="perm_vpn_title">VPN 连接授权</string>
+    <string name="perm_vpn_desc">用于在网络层阻断管控应用的网络访问</string>
+    <string name="perm_anti_uninstall_title">🛡️ 设备防卸载保护</string>
+    <string name="perm_anti_uninstall_desc">防止应用被强行卸载或停止运行</string>
+    <string name="perm_complete_all">请先完成全部授权</string>
+    <string name="perm_back_home">返回首页</string>
+    <string name="perm_enter_app">进入应用</string>
+    <string name="perm_guide_title">授权引导</string>
+
+    <!-- Permission dialog messages (HTML) -->
+    <string name="perm_guide_notification_msg"><![CDATA[接下来将跳转至「通知」设置。<br><br>为了保证防沉迷服务在后台持续稳定运行而不被清理，我们需要常驻一条系统通知。请在接下来的界面中打开<font color=\'#4CAF50\'><b>允许通知</b></font>的开关。]]></string>
+    <string name="perm_guide_usage_msg"><![CDATA[接下来将跳转至「使用情况访问权限」设置。<br><br>为了能够准确判断您当前是否正在使用受管 App，请在接下来的列表中找到「AI 语音锁」，并将其状态修改为<font color=\'#4CAF50\'><b>【允许访问使用记录】</b></font>。]]></string>
+    <string name="perm_guide_battery_msg"><![CDATA[接下来将跳转至「电池优化」设置。<br><br>由于 Android 系统的省电机制会强制关闭后台应用，为了防沉迷服务能稳定生效，请务必将其设置为<font color=\'#4CAF50\'><b>【无限制】</b></font>或<font color=\'#4CAF50\'><b>【不优化】</b></font>。]]></string>
+    <string name="perm_guide_vpn_msg"><![CDATA[接下来将弹出系统级别的「网络连接请求」确认框。<br><br>此功能仅用于在设备本地建立虚拟黑洞来阻断受管 App 的网络，绝对不会上传您的任何流量数据。请放心点击<font color=\'#4CAF50\'><b>【确定】</b></font>。]]></string>
+
+    <!-- PIN Lock -->
+    <string name="pin_enter_password">请输入解锁密码</string>
+    <string name="pin_protect_settings">保护系统设置不被篡改</string>
+    <string name="pin_enter_original">请输入原解锁密码</string>
+    <string name="pin_verify_to_modify">验证身份以修改密码</string>
+    <string name="pin_set_new_password">设置新解锁密码</string>
+    <string name="pin_set_password">设置解锁密码</string>
+    <string name="pin_set_4digit">请设置一个4位数的密码以保护应用</string>
+    <string name="pin_verify_to_access">验证身份以访问应用面板</string>
+    <string name="pin_enter_again">请再次输入密码</string>
+    <string name="pin_confirm_password">请确认您刚才设置的4位数密码</string>
+    <string name="pin_modified_success">密码修改成功</string>
+    <string name="pin_mismatch">两次密码不一致，请重试</string>
+    <string name="pin_wrong_password">密码错误，请重试</string>
+
+    <!-- App Select -->
+    <string name="app_select_title">配置守护规则</string>
+    <string name="app_select_search_hint">搜索应用…</string>
+
+    <!-- Settings dialog -->
+    <string name="settings_daily_limit">每日总时长上限</string>
+    <string name="settings_continuous_limit">每次连续使用上限</string>
+    <string name="settings_cooldown">强制休息冷却时间</string>
+    <string name="settings_minutes_format">%d 分钟</string>
+
+    <!-- About dialog -->
+    <string name="about_view_privacy">查看用户协议与隐私政策</string>
+    <string name="about_withdraw_privacy">撤回隐私协议授权</string>
+    <string name="about_withdraw_desc">撤回后将清空所有数据并退出应用</string>
+    <string name="about_check_update">检查更新</string>
+    <string name="about_check_update_desc">检查云端是否有新版本可用</string>
+    <string name="about_check_update_with_version">检查更新 (当前版本 v%s)</string>
+    <string name="about_company">杭州市钱塘区越思软件开发工作室</string>
+    <string name="about_icp">浙ICP备XXXXXXXX号</string>
+    <string name="about_gongan">浙公网安备XXXXXX号</string>
+    <string name="about_withdraw_confirm_title">撤回隐私协议授权</string>
+    <string name="about_withdraw_confirm_msg"><![CDATA[撤回隐私协议同意将停止所有数据记录，并清空本地存储，App 将退出且不可用直到您再次同意。<br><br><font color=\'#D32F2F\'><b>您确定要撤回同意吗？</b></font>]]></string>
+
+    <!-- Toast messages -->
+    <string name="toast_settings_saved">健康防沉迷规则已保存</string>
+    <string name="toast_no_email_client">未找到邮件客户端，请先安装邮件App</string>
+    <string name="toast_checking_update">正在检查更新…</string>
+    <string name="toast_latest_version">当前已是最新版本</string>
+    <string name="toast_update_check_failed">检查更新失败，请检查网络</string>
+    <string name="toast_update_error">检查更新出错了</string>
+    <string name="toast_device_admin_disabled">设备防卸载保护已解除</string>
+
+    <!-- Feedback -->
+    <string name="feedback_subject">[AI语音锁] 用户反馈</string>
+    <string name="feedback_body_prefix">问题描述：\n\n\n-----------------\n</string>
+    <string name="feedback_device_info">设备：%s\n系统：Android %s\n版本：v%s</string>
+
+    <!-- Device Admin -->
+    <string name="device_admin_explanation">开启后可以防止应用被意外卸载或强行停止。</string>
+
+    <!-- Format helpers -->
+    <string name="time_format_mm_ss">%02d:%02d</string>
 </resources>

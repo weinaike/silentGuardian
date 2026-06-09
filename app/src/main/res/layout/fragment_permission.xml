@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="静默守护"
+            android:text="@string/perm_silent_guardian"
             android:textColor="@color/text_primary"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
-                
+
             <!-- 卡片: 设备防卸载保护 (必须) -->
             <LinearLayout
                 android:id="@+id/llAntiUninstallEntry"
@@ -61,18 +61,18 @@
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
                 android:focusable="true">
-                
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-                    
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="🛡️ 设备防卸载保护"
+                        android:text="@string/perm_anti_uninstall_title"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary" />
@@ -90,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="防止应用被强行卸载或停止运行"
+                    android:text="@string/perm_anti_uninstall_desc"
                     android:textColor="@color/text_hint"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -107,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/outline"
-            android:text="请先完成全部授权"
+            android:text="@string/perm_complete_all"
             android:textColor="@color/text_hint"
             android:enabled="false"
             android:textSize="15sp"

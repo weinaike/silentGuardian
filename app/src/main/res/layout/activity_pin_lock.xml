@@ -19,17 +19,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="请输入解锁密码"
+        android:text="@string/pin_enter_password"
         android:textColor="@color/text_primary"
         android:textSize="22sp"
         android:textStyle="bold" />
-        
+
     <TextView
         android:id="@+id/tvPinSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="保护系统设置不被篡改"
+        android:text="@string/pin_protect_settings"
         android:textColor="@color/text_hint"
         android:textSize="14sp" />
 
@@ -47,7 +47,7 @@
         <View android:id="@+id/dot3" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/bg_pin_dot_empty" android:layout_margin="12dp" />
         <View android:id="@+id/dot4" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/bg_pin_dot_empty" android:layout_margin="12dp" />
     </LinearLayout>
-    
+
     <TextView
         android:id="@+id/tvErrorMsg"
         android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
         android:textColor="@color/danger"
         android:textSize="14sp"
         android:visibility="invisible"
-        android:text="密码错误，请重试" />
+        android:text="@string/pin_wrong_password" />
 
     <View
         android:layout_width="match_parent"
@@ -82,10 +82,10 @@
         <Button style="@style/PinButton" android:text="7" android:tag="7" />
         <Button style="@style/PinButton" android:text="8" android:tag="8" />
         <Button style="@style/PinButton" android:text="9" android:tag="9" />
-        
+
         <View android:layout_width="80dp" android:layout_height="80dp" /> <!-- Empty Space -->
         <Button style="@style/PinButton" android:text="0" android:tag="0" />
-        
+
         <!-- Delete Button -->
         <ImageButton
             android:id="@+id/btnDelete"

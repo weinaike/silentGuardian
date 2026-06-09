@@ -19,7 +19,7 @@
         android:background="@drawable/bg_skip_ad"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:text="跳过"
+        android:text="@string/splash_skip"
         android:textColor="@android:color/white"
         android:textSize="14sp"
         android:visibility="gone" />

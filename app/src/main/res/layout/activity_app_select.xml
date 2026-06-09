@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="返回"
+                android:text="@string/btn_back"
                 android:textColor="@color/text_primary"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="配置守护规则"
+            android:text="@string/app_select_title"
             android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:backgroundTint="@color/primary"
-            android:text="保存"
+            android:text="@string/btn_save"
             android:textColor="@color/surface"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -75,7 +75,7 @@
                 android:background="@drawable/bg_card_surface"
                 android:drawableStart="@android:drawable/ic_menu_search"
                 android:drawablePadding="8dp"
-                android:hint="搜索应用..."
+                android:hint="@string/app_select_search_hint"
                 android:paddingHorizontal="14dp"
                 android:textSize="14sp" />
 

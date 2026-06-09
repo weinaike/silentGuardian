@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="关于"
+        android:text="@string/other_about"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="查看用户协议与隐私政策"
+            android:text="@string/about_view_privacy"
             android:textSize="16sp"
             android:textColor="@color/text_primary"/>
     </LinearLayout>
@@ -49,13 +49,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="撤回隐私协议授权"
+            android:text="@string/about_withdraw_privacy"
             android:textSize="16sp"
             android:textColor="@color/danger"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="撤回后将清空所有数据并退出应用"
+            android:text="@string/about_withdraw_desc"
             android:textSize="13sp"
             android:textColor="@color/text_hint"
             android:layout_marginTop="2dp"/>
@@ -77,13 +77,13 @@
             android:id="@+id/tvAboutVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="检查更新"
+            android:text="@string/about_check_update"
             android:textSize="16sp"
             android:textColor="@color/text_primary"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="检查云端是否有新版本可用"
+            android:text="@string/about_check_update_desc"
             android:textSize="13sp"
             android:textColor="@color/text_hint"
             android:layout_marginTop="2dp"/>
@@ -104,7 +104,7 @@
             android:id="@+id/tvCompanyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="杭州市钱塘区越思软件开发工作室"
+            android:text="@string/about_company"
             android:textSize="12sp"
             android:textColor="@color/text_hint"/>
 
@@ -112,7 +112,7 @@
             android:id="@+id/tvIcpNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="浙ICP备XXXXXXXX号"
+            android:text="@string/about_icp"
             android:textSize="12sp"
             android:textColor="@color/text_hint"
             android:layout_marginTop="2dp"/>
@@ -121,7 +121,7 @@
             android:id="@+id/tvGonganNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="浙公网安备XXXXXX号"
+            android:text="@string/about_gongan"
             android:textSize="12sp"
             android:textColor="@color/text_hint"
             android:layout_marginTop="2dp"
@@ -129,4 +129,3 @@
     </LinearLayout>
 
 </LinearLayout>
-

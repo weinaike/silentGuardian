@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">AI Voice Lock</string>
+    <string name="app_slogan">Silent Guardian, Healthy Conversations</string>
+    <string name="app_name_en">Silent Guardian</string>
+
+    <!-- Common buttons -->
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_agree">Agree</string>
+    <string name="btn_disagree_and_exit">Disagree &amp; Exit</string>
+    <string name="btn_go_settings">Go to Settings</string>
+    <string name="btn_go_authorize">Authorize</string>
+    <string name="btn_read">OK</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_save_settings">Save Settings</string>
+    <string name="btn_update_now">Update Now</string>
+    <string name="btn_later">Later</string>
+    <string name="btn_withdraw_and_exit">Withdraw &amp; Exit</string>
+
+    <!-- Splash -->
+    <string name="splash_skip">Skip</string>
+    <string name="splash_skip_count">Skip %d</string>
+
+    <!-- Privacy -->
+    <string name="privacy_dialog_title">User Agreement &amp; Privacy Policy</string>
+
+    <!-- Home -->
+    <string name="home_core_service">Core Guardian Service</string>
+    <string name="home_status_guarding">Silently guarding…</string>
+    <string name="home_status_running">Running</string>
+    <string name="home_status_paused">Paused</string>
+    <string name="home_today_usage">📊 Today\'s Usage</string>
+    <string name="home_daily_limit_suffix">/ %d min</string>
+    <string name="home_current_session">⏱️ Current Session</string>
+    <string name="home_forced_rest_template">Forced rest, %dm %ds remaining</string>
+    <string name="home_managed_apps">Guarded Apps</string>
+    <string name="home_no_managed_apps">No guarded apps</string>
+    <string name="home_vpn_notice">When the guardian service is running, a 🔑 key icon will appear in the status bar. This is normal for the VPN connection. Your child may notice it.</string>
+    <string name="home_quota_exhausted">Today\'s quota exhausted</string>
+    <string name="home_come_back_tomorrow">Come back tomorrow!</string>
+    <string name="home_session_active">Session active</string>
+    <string name="home_forced_rest">Forced rest</string>
+    <string name="home_available">Available</string>
+    <string name="home_rest_eyes">Put down the phone and rest your eyes</string>
+    <string name="home_remaining">(remaining)</string>
+    <string name="home_screen_time">Screen</string>
+    <string name="home_call_time">Call</string>
+    <string name="home_app_usage_detail">(Screen: %s | Call: %s)</string>
+
+    <!-- Other / Settings page -->
+    <string name="other_settings">Settings</string>
+    <string name="other_anti_addiction_rules">Anti-Addiction Rules</string>
+    <string name="other_anti_addiction_desc">Set daily limits, session duration &amp; rest periods</string>
+    <string name="other_manage_apps">Manage Apps</string>
+    <string name="other_manage_apps_desc">Select or remove apps under AI guardian protection</string>
+    <string name="other_modify_pin">Change PIN</string>
+    <string name="other_modify_pin_desc">Reset the password for accessing AI Voice Lock and settings</string>
+    <string name="other_feedback">Feedback</string>
+    <string name="other_feedback_desc">Have a problem or idea? Send us an email</string>
+    <string name="other_about">About</string>
+    <string name="other_about_desc">Privacy policy, user agreement &amp; version updates</string>
+    <string name="other_language">Language / 语言</string>
+    <string name="other_language_desc">Follow system or switch language manually</string>
+    <string name="other_language_system">Follow System</string>
+    <string name="other_language_zh">简体中文</string>
+    <string name="other_language_en">English</string>
+
+    <!-- Permission page -->
+    <string name="perm_silent_guardian">Silent Guardian</string>
+    <string name="perm_notification_title">Notification Permission</string>
+    <string name="perm_notification_desc">Keep the guardian service running in the background</string>
+    <string name="perm_usage_title">Usage Access</string>
+    <string name="perm_usage_desc">Detect when guarded apps are being used</string>
+    <string name="perm_battery_title">Ignore Battery Optimization</string>
+    <string name="perm_battery_desc">Prevent the system from stopping the guardian service</string>
+    <string name="perm_vpn_title">VPN Connection</string>
+    <string name="perm_vpn_desc">Block network access for guarded apps</string>
+    <string name="perm_anti_uninstall_title">🛡️ Anti-Uninstall Protection</string>
+    <string name="perm_anti_uninstall_desc">Prevent the app from being forcibly uninstalled or stopped</string>
+    <string name="perm_complete_all">Complete all authorizations first</string>
+    <string name="perm_back_home">Back to Home</string>
+    <string name="perm_enter_app">Enter App</string>
+    <string name="perm_guide_title">Authorization Guide</string>
+
+    <!-- Permission dialog messages (HTML) -->
+    <string name="perm_guide_notification_msg"><![CDATA[You will be redirected to the Notification settings.<br><br>To keep the anti-addiction service running stably in the background, we need to display a persistent notification. Please enable <font color=\'#4CAF50\'><b>Allow Notifications</b></font> in the next screen.]]></string>
+    <string name="perm_guide_usage_msg"><![CDATA[You will be redirected to the Usage Access settings.<br><br>To accurately detect when you are using guarded apps, please find <b>AI Voice Lock</b> in the list and enable <font color=\'#4CAF50\'><b>[Allow usage access]</b></font>.]]></string>
+    <string name="perm_guide_battery_msg"><![CDATA[You will be redirected to the Battery Optimization settings.<br><br>Android\'s battery-saving mechanism may forcibly close background apps. To ensure the guardian service works properly, please set it to <font color=\'#4CAF50\'><b>[Unrestricted]</b></font> or <font color=\'#4CAF50\'><b>[Not optimized]</b></font>.]]></string>
+    <string name="perm_guide_vpn_msg"><![CDATA[A system-level Network Connection Request dialog will appear.<br><br>This feature only creates a local virtual black hole to block network access for guarded apps. It will never upload any of your traffic data. Please confidently tap <font color=\'#4CAF50\'><b>[OK]</b></font>.]]></string>
+
+    <!-- PIN Lock -->
+    <string name="pin_enter_password">Enter PIN</string>
+    <string name="pin_protect_settings">Protect settings from being tampered with</string>
+    <string name="pin_enter_original">Enter current PIN</string>
+    <string name="pin_verify_to_modify">Verify identity to change PIN</string>
+    <string name="pin_set_new_password">Set new PIN</string>
+    <string name="pin_set_password">Set PIN</string>
+    <string name="pin_set_4digit">Set a 4-digit PIN to protect the app</string>
+    <string name="pin_verify_to_access">Verify identity to access the panel</string>
+    <string name="pin_enter_again">Enter PIN again</string>
+    <string name="pin_confirm_password">Please confirm the 4-digit PIN you just set</string>
+    <string name="pin_modified_success">PIN changed successfully</string>
+    <string name="pin_mismatch">PINs do not match, please try again</string>
+    <string name="pin_wrong_password">Wrong PIN, please try again</string>
+
+    <!-- App Select -->
+    <string name="app_select_title">Configure Guardian Rules</string>
+    <string name="app_select_search_hint">Search apps…</string>
+
+    <!-- Settings dialog -->
+    <string name="settings_daily_limit">Daily Total Limit</string>
+    <string name="settings_continuous_limit">Per-Session Limit</string>
+    <string name="settings_cooldown">Forced Rest Duration</string>
+    <string name="settings_minutes_format">%d min</string>
+
+    <!-- About dialog -->
+    <string name="about_view_privacy">View User Agreement &amp; Privacy Policy</string>
+    <string name="about_withdraw_privacy">Withdraw Privacy Consent</string>
+    <string name="about_withdraw_desc">All data will be cleared and the app will exit</string>
+    <string name="about_check_update">Check for Updates</string>
+    <string name="about_check_update_desc">Check if a newer version is available</string>
+    <string name="about_check_update_with_version">Check for Updates (current version v%s)</string>
+    <string name="about_company">Hangzhou Qiantang Yuesi Software Development Studio</string>
+    <string name="about_icp">Zhejiang ICP No. XXXXXXXX</string>
+    <string name="about_gongan">Zhejiang Public Security Record No. XXXXXX</string>
+    <string name="about_withdraw_confirm_title">Withdraw Privacy Consent</string>
+    <string name="about_withdraw_confirm_msg"><![CDATA[Withdrawing privacy consent will stop all data recording, clear local storage, and exit the app. The app will be unusable until you agree again.<br><br><font color=\'#D32F2F\'><b>Are you sure you want to withdraw consent?</b></font>]]></string>
+
+    <!-- Toast messages -->
+    <string name="toast_settings_saved">Anti-addiction rules saved</string>
+    <string name="toast_no_email_client">No email client found. Please install an email app first.</string>
+    <string name="toast_checking_update">Checking for updates…</string>
+    <string name="toast_latest_version">Already up to date</string>
+    <string name="toast_update_check_failed">Update check failed. Please check your network.</string>
+    <string name="toast_update_error">An error occurred while checking for updates</string>
+    <string name="toast_device_admin_disabled">Anti-uninstall protection has been disabled</string>
+
+    <!-- Feedback -->
+    <string name="feedback_subject">[AI Voice Lock] User Feedback</string>
+    <string name="feedback_body_prefix">Problem description:\n\n\n-----------------\n</string>
+    <string name="feedback_device_info">Device: %s\nSystem: Android %s\nVersion: v%s</string>
+
+    <!-- Device Admin -->
+    <string name="device_admin_explanation">Prevent the app from being accidentally uninstalled or forcibly stopped.</string>
+
+    <!-- Format helpers -->
+    <string name="time_format_mm_ss">%02d:%02d</string>
+</resources>

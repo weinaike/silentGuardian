@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.yestek.silentguardian.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -49,15 +50,15 @@ object UpdateManager {
                         }
                         showUpdateDialog(activity, updateTitle, updateMessage, downloadUrl, forceUpdate, latestVersionCode)
                     } else if (showToast) {
-                        android.widget.Toast.makeText(activity, "当前已是最新版本", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(activity, R.string.toast_latest_version, android.widget.Toast.LENGTH_SHORT).show()
                     }
                 } else if (showToast) {
-                    android.widget.Toast.makeText(activity, "检查更新失败，请检查网络", android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(activity, R.string.toast_update_check_failed, android.widget.Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Check update failed", e)
                 if (showToast) {
-                    android.widget.Toast.makeText(activity, "检查更新出错了", android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(activity, R.string.toast_update_error, android.widget.Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -105,7 +106,7 @@ object UpdateManager {
             .setTitle(title)
             .setMessage(message)
             .setCancelable(!forceUpdate)
-            .setPositiveButton("立即更新") { _, _ ->
+            .setPositiveButton(R.string.btn_update_now) { _, _ ->
                 try {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl))
                     activity.startActivity(intent)
@@ -119,7 +120,7 @@ object UpdateManager {
             }
 
         if (!forceUpdate) {
-            builder.setNegativeButton("稍后") { dialog, _ ->
+            builder.setNegativeButton(R.string.btn_later) { dialog, _ ->
                 com.tencent.mmkv.MMKV.defaultMMKV().encode("ignored_update_version", latestVersionCode)
                 dialog.dismiss()
             }

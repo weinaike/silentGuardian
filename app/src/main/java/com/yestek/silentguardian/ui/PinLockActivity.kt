@@ -20,7 +20,7 @@ class PinLockActivity : AppCompatActivity() {
     private var isSettingMode = false
     private var isModifyMode = false
     private var firstPinForSetting = ""
-    
+
     private lateinit var tvPinTitle: TextView
     private lateinit var tvPinSubtitle: TextView
     private lateinit var tvErrorMsg: TextView
@@ -33,7 +33,7 @@ class PinLockActivity : AppCompatActivity() {
         tvPinTitle = findViewById(R.id.tvPinTitle)
         tvPinSubtitle = findViewById(R.id.tvPinSubtitle)
         tvErrorMsg = findViewById(R.id.tvErrorMsg)
-        
+
         dots = listOf(
             findViewById(R.id.dot1),
             findViewById(R.id.dot2),
@@ -50,14 +50,14 @@ class PinLockActivity : AppCompatActivity() {
 
     private fun setupModeUI() {
         if (isModifyMode && !isSettingMode) {
-            tvPinTitle.text = "请输入原解锁密码"
-            tvPinSubtitle.text = "验证身份以修改密码"
+            tvPinTitle.text = getString(R.string.pin_enter_original)
+            tvPinSubtitle.text = getString(R.string.pin_verify_to_modify)
         } else if (isSettingMode) {
-            tvPinTitle.text = if (isModifyMode) "设置新解锁密码" else "设置解锁密码"
-            tvPinSubtitle.text = "请设置一个4位数的密码以保护应用"
+            tvPinTitle.text = getString(if (isModifyMode) R.string.pin_set_new_password else R.string.pin_set_password)
+            tvPinSubtitle.text = getString(R.string.pin_set_4digit)
         } else {
-            tvPinTitle.text = "请输入解锁密码"
-            tvPinSubtitle.text = "验证身份以访问应用面板"
+            tvPinTitle.text = getString(R.string.pin_enter_password)
+            tvPinSubtitle.text = getString(R.string.pin_verify_to_access)
         }
     }
 
@@ -69,7 +69,7 @@ class PinLockActivity : AppCompatActivity() {
                     currentPin += i.toString()
                     updateDots()
                     tvErrorMsg.visibility = View.INVISIBLE
-                    
+
                     if (currentPin.length == 4) {
                         handlePinComplete()
                     }
@@ -98,27 +98,27 @@ class PinLockActivity : AppCompatActivity() {
     private fun handlePinComplete() {
         lifecycleScope.launch {
             delay(100) // Small delay so user sees the 4th dot fill up
-            
+
             if (isSettingMode) {
                 if (firstPinForSetting.isEmpty()) {
                     firstPinForSetting = currentPin
                     currentPin = ""
                     updateDots()
-                    tvPinTitle.text = "请再次输入密码"
-                    tvPinSubtitle.text = "请确认您刚才设置的4位数密码"
+                    tvPinTitle.text = getString(R.string.pin_enter_again)
+                    tvPinSubtitle.text = getString(R.string.pin_confirm_password)
                 } else {
                     if (currentPin == firstPinForSetting) {
                         DataManager.appPinCode = currentPin
                         DataManager.isAppUnlocked = true
-                        
+
                         if (isModifyMode) {
-                            android.widget.Toast.makeText(this@PinLockActivity, "密码修改成功", android.widget.Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(this@PinLockActivity, R.string.pin_modified_success, android.widget.Toast.LENGTH_SHORT).show()
                             finish()
                         } else {
                             startMainActivityAndFinish()
                         }
                     } else {
-                        showError("两次密码不一致，请重试")
+                        showError(getString(R.string.pin_mismatch))
                         firstPinForSetting = ""
                         currentPin = ""
                         updateDots()
@@ -139,7 +139,7 @@ class PinLockActivity : AppCompatActivity() {
                         startMainActivityAndFinish()
                     }
                 } else {
-                    showError("密码错误，请重试")
+                    showError(getString(R.string.pin_wrong_password))
                     currentPin = ""
                     updateDots()
                 }
@@ -156,7 +156,7 @@ class PinLockActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
-    
+
     override fun onBackPressed() {
         // Prevent back button from bypassing lock
         // Move app to background instead

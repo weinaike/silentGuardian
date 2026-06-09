@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var pbUsage: ProgressBar
     private lateinit var llManagedApps: LinearLayout
     private lateinit var llVpnNotice: LinearLayout
-    
+
     private lateinit var tvSessionMinutes: TextView
     private lateinit var tvSessionLimit: TextView
     private lateinit var pbSessionUsage: ProgressBar
@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        
+
         switchService = view.findViewById(R.id.switchService)
         tvServiceStatus = view.findViewById(R.id.tvServiceStatus)
         cardService = view.findViewById(R.id.cardService)
@@ -50,14 +50,14 @@ class HomeFragment : Fragment() {
         pbUsage = view.findViewById(R.id.pbUsage)
         llManagedApps = view.findViewById(R.id.llManagedApps)
         llVpnNotice = view.findViewById(R.id.llVpnNotice)
-        
+
         tvSessionMinutes = view.findViewById(R.id.tvSessionMinutes)
         tvSessionLimit = view.findViewById(R.id.tvSessionLimit)
         pbSessionUsage = view.findViewById(R.id.pbSessionUsage)
         tvCooldownStatus = view.findViewById(R.id.tvCooldownStatus)
         llSessionCard = view.findViewById(R.id.llSessionCard)
         tvSessionTitle = view.findViewById(R.id.tvSessionTitle)
-        
+
         // The listener will be set in onResume to avoid premature triggering
 
 
@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         val isEnabled = DataManager.isServiceEnabled
         updateServiceCardUI(isEnabled)
-        
+
         switchService.setOnCheckedChangeListener(null)
         switchService.isChecked = isEnabled
         switchService.setOnCheckedChangeListener { _, isChecked ->
@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
                 requireContext().stopService(Intent(requireContext(), MonitorService::class.java))
             }
         }
-        
+
         // Ensure the service state matches the data manager state on every resume
         if (isEnabled) {
             androidx.core.content.ContextCompat.startForegroundService(requireContext(), Intent(requireContext(), MonitorService::class.java))
@@ -95,13 +95,13 @@ class HomeFragment : Fragment() {
     private fun updateServiceCardUI(isEnabled: Boolean) {
         val tvServiceTitle = view?.findViewById<TextView>(R.id.tvServiceTitle)
         if (isEnabled) {
-            tvServiceStatus.text = "运行中"
+            tvServiceStatus.text = getString(R.string.home_status_running)
             tvServiceStatus.setTextColor(android.graphics.Color.parseColor("#D9FFFFFF"))
             tvServiceTitle?.setTextColor(android.graphics.Color.WHITE)
             cardService.setBackgroundResource(R.drawable.bg_service_card_on)
             llVpnNotice.visibility = View.VISIBLE
         } else {
-            tvServiceStatus.text = "已暂停"
+            tvServiceStatus.text = getString(R.string.home_status_paused)
             tvServiceStatus.setTextColor(android.graphics.Color.parseColor("#9AA0A6"))
             tvServiceTitle?.setTextColor(android.graphics.Color.parseColor("#1B1C18"))
             cardService.setBackgroundResource(R.drawable.bg_card_surface)
@@ -113,11 +113,11 @@ class HomeFragment : Fragment() {
         llManagedApps.removeAllViews()
         val apps = DataManager.managedApps
         if (apps.isEmpty()) {
-            val emptyTv = TextView(requireContext()).apply { text = "暂无受守护应用" }
+            val emptyTv = TextView(requireContext()).apply { text = getString(R.string.home_no_managed_apps) }
             llManagedApps.addView(emptyTv)
             return
         }
-        
+
         val pm = requireContext().packageManager
         apps.forEach { pkgName ->
             var appName = pkgName
@@ -129,7 +129,7 @@ class HomeFragment : Fragment() {
             } catch (e: Exception) {
                 // Ignore and use pkgName
             }
-            
+
             val view = layoutInflater.inflate(R.layout.item_managed_app, llManagedApps, false)
             view.tag = pkgName
             view.findViewById<TextView>(R.id.tvAppName).text = appName
@@ -142,14 +142,14 @@ class HomeFragment : Fragment() {
             val screenSecs = DataManager.getAppScreenSecondsToday(pkgName)
             val callSecs = DataManager.getAppCallSecondsToday(pkgName)
             val totalLimitMinutes = DataManager.dailyTotalLimitMinutes
-            
-            val usedStr = String.format("%02d:%02d", usedSecs / 60, usedSecs % 60)
-            val limitStr = String.format("%02d:00", totalLimitMinutes)
-            val screenStr = String.format("%02d:%02d", screenSecs / 60, screenSecs % 60)
-            val callStr = String.format("%02d:%02d", callSecs / 60, callSecs % 60)
-            
+
+            val usedStr = String.format(getString(R.string.time_format_mm_ss), usedSecs / 60, usedSecs % 60)
+            val limitStr = String.format(getString(R.string.time_format_mm_ss), totalLimitMinutes, 0)
+            val screenStr = String.format(getString(R.string.time_format_mm_ss), screenSecs / 60, screenSecs % 60)
+            val callStr = String.format(getString(R.string.time_format_mm_ss), callSecs / 60, callSecs % 60)
+
             view.findViewById<TextView>(R.id.tvAppUsage).text = "$usedStr / $limitStr"
-            view.findViewById<TextView>(R.id.tvAppUsageDetail).text = "(亮屏: $screenStr | 通话: $callStr)"
+            view.findViewById<TextView>(R.id.tvAppUsageDetail).text = getString(R.string.home_app_usage_detail, screenStr, callStr)
 
             llManagedApps.addView(view)
         }
@@ -160,72 +160,72 @@ class HomeFragment : Fragment() {
     private fun startUIRefreshLoop() {
         if (isRefreshing) return
         isRefreshing = true
-        
+
         lifecycleScope.launch {
             while (isRefreshing) {
                 val totalUsedSecs = DataManager.getGlobalUsedSecondsToday()
                 val totalLimitSecs = DataManager.dailyTotalLimitMinutes * 60
-                
+
                 val totalMin = totalUsedSecs / 60
                 val totalSec = totalUsedSecs % 60
-                tvUsedMinutes.text = String.format("%02d:%02d", totalMin, totalSec)
+                tvUsedMinutes.text = String.format(getString(R.string.time_format_mm_ss), totalMin, totalSec)
                 tvLimitMinutes.text = " / ${DataManager.dailyTotalLimitMinutes}:00"
                 pbUsage.max = totalLimitSecs
                 pbUsage.progress = totalUsedSecs
 
                 updateSessionUI()
-                
+
                 // Update managed apps data dynamically without removeAllViews
                 for (i in 0 until llManagedApps.childCount) {
                     val view = llManagedApps.getChildAt(i)
                     val pkgName = view.tag as? String ?: continue
-                    
+
                     val usedSecs = DataManager.getAppUsedSecondsToday(pkgName)
                     val screenSecs = DataManager.getAppScreenSecondsToday(pkgName)
                     val callSecs = DataManager.getAppCallSecondsToday(pkgName)
                     val totalLimitMinutes = DataManager.dailyTotalLimitMinutes
-                    
-                    val usedStr = String.format("%02d:%02d", usedSecs / 60, usedSecs % 60)
-                    val limitStr = String.format("%02d:00", totalLimitMinutes)
-                    val screenStr = String.format("%02d:%02d", screenSecs / 60, screenSecs % 60)
-                    val callStr = String.format("%02d:%02d", callSecs / 60, callSecs % 60)
-                    
+
+                    val usedStr = String.format(getString(R.string.time_format_mm_ss), usedSecs / 60, usedSecs % 60)
+                    val limitStr = String.format(getString(R.string.time_format_mm_ss), totalLimitMinutes, 0)
+                    val screenStr = String.format(getString(R.string.time_format_mm_ss), screenSecs / 60, screenSecs % 60)
+                    val callStr = String.format(getString(R.string.time_format_mm_ss), callSecs / 60, callSecs % 60)
+
                     view.findViewById<TextView>(R.id.tvAppUsage).text = "$usedStr / $limitStr"
-                    view.findViewById<TextView>(R.id.tvAppUsageDetail).text = "(亮屏: $screenStr | 通话: $callStr)"
+                    view.findViewById<TextView>(R.id.tvAppUsageDetail).text = getString(R.string.home_app_usage_detail, screenStr, callStr)
                 }
-                
+
                 delay(1000)
             }
         }
     }
-    
+
     private fun updateSessionUI() {
         val totalUsedSecs = DataManager.getGlobalUsedSecondsToday()
         val totalLimitSecs = DataManager.dailyTotalLimitMinutes * 60
         val isTotalExhausted = totalLimitSecs > 0 && totalUsedSecs >= totalLimitSecs
-        
+
         if (isTotalExhausted) {
             llSessionCard.setBackgroundColor(android.graphics.Color.parseColor("#FFF3E0"))
-            tvSessionTitle.text = "今日额度已用尽"
+            tvSessionTitle.text = getString(R.string.home_quota_exhausted)
             tvSessionTitle.setTextColor(android.graphics.Color.parseColor("#FF9800"))
-            tvSessionMinutes.text = String.format("%02d:00", DataManager.dailyTotalLimitMinutes)
+            tvSessionMinutes.text = String.format(getString(R.string.time_format_mm_ss), DataManager.dailyTotalLimitMinutes, 0)
             tvSessionLimit.text = " / ${DataManager.dailyTotalLimitMinutes}:00"
             pbSessionUsage.progress = 100
             tvCooldownStatus.visibility = View.VISIBLE
-            tvCooldownStatus.text = "明天再来吧！"
+            tvCooldownStatus.text = getString(R.string.home_come_back_tomorrow)
             return
         }
-        
+
         val currentSessionSecs = DataManager.currentSessionSeconds
         val sessionLimitSecs = DataManager.continuousLimitMinutes * 60
-        
+
         if (currentSessionSecs > 0) {
             llSessionCard.setBackgroundColor(android.graphics.Color.parseColor("#E3F2FD"))
-            tvSessionTitle.text = "单次使用中"
+            tvSessionTitle.text = getString(R.string.home_session_active)
             tvSessionTitle.setTextColor(android.graphics.Color.parseColor("#2196F3"))
             val curMin = currentSessionSecs / 60
             val curSec = currentSessionSecs % 60
-            tvSessionMinutes.text = String.format("%02d:%02d", curMin, curSec)
+            tvSessionMinutes.text = String.format(getString(R.string.time_format_mm_ss), curMin, curSec)
             tvSessionLimit.text = " / ${DataManager.continuousLimitMinutes}:00"
             pbSessionUsage.max = sessionLimitSecs
             pbSessionUsage.progress = currentSessionSecs
@@ -235,23 +235,23 @@ class HomeFragment : Fragment() {
             if (cooldownEndTime > System.currentTimeMillis()) {
                 val remainingSecs = ((cooldownEndTime - System.currentTimeMillis()) / 1000).toInt()
                 val cooldownLimitSecs = DataManager.cooldownMinutes * 60
-                
+
                 llSessionCard.setBackgroundColor(android.graphics.Color.parseColor("#F3E5F5"))
-                tvSessionTitle.text = "强制休息中"
+                tvSessionTitle.text = getString(R.string.home_forced_rest)
                 tvSessionTitle.setTextColor(android.graphics.Color.parseColor("#9C27B0"))
                 val remMin = remainingSecs / 60
                 val remSec = remainingSecs % 60
-                tvSessionMinutes.text = String.format("%02d:%02d", remMin, remSec)
-                tvSessionLimit.text = " / ${DataManager.cooldownMinutes}:00 (剩余)"
+                tvSessionMinutes.text = String.format(getString(R.string.time_format_mm_ss), remMin, remSec)
+                tvSessionLimit.text = " / ${DataManager.cooldownMinutes}:00 ${getString(R.string.home_remaining)}"
                 pbSessionUsage.max = cooldownLimitSecs
                 pbSessionUsage.progress = remainingSecs
                 tvCooldownStatus.visibility = View.VISIBLE
-                tvCooldownStatus.text = "请放下手机休息一下眼睛"
+                tvCooldownStatus.text = getString(R.string.home_rest_eyes)
                 return
             }
-            
+
             llSessionCard.setBackgroundColor(android.graphics.Color.WHITE)
-            tvSessionTitle.text = "可使用状态"
+            tvSessionTitle.text = getString(R.string.home_available)
             tvSessionTitle.setTextColor(android.graphics.Color.parseColor("#4CAF50"))
             tvSessionMinutes.text = "00:00"
             tvSessionLimit.text = " / ${DataManager.continuousLimitMinutes}:00"

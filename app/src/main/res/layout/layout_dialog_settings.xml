@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="健康防沉迷规则"
+        android:text="@string/other_anti_addiction_rules"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="每日总时长上限"
+                android:text="@string/settings_daily_limit"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"/>
             <View
@@ -50,7 +50,7 @@
                 android:id="@+id/tvDailyLimit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="120 分钟"
+                android:text="@string/settings_minutes_format"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -73,7 +73,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="每次连续使用上限"
+                android:text="@string/settings_continuous_limit"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"/>
             <View
@@ -84,7 +84,7 @@
                 android:id="@+id/tvContinuousLimit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="30 分钟"
+                android:text="@string/settings_minutes_format"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -107,7 +107,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="强制休息冷却时间"
+                android:text="@string/settings_cooldown"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"/>
             <View
@@ -118,7 +118,7 @@
                 android:id="@+id/tvCooldown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 分钟"
+                android:text="@string/settings_minutes_format"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -138,7 +138,7 @@
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/primary"
             android:textColor="@color/surface"
-            android:text="保存设置"
+            android:text="@string/btn_save_settings"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
