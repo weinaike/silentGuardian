@@ -89,4 +89,44 @@
             android:layout_marginTop="2dp"/>
     </LinearLayout>
 
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginHorizontal="16dp"/>
+
+    <!-- 公司信息与备案号 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/tvCompanyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="杭州市钱塘区越思软件开发工作室"
+            android:textSize="12sp"
+            android:textColor="@color/text_hint"/>
+
+        <TextView
+            android:id="@+id/tvIcpNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="浙ICP备XXXXXXXX号"
+            android:textSize="12sp"
+            android:textColor="@color/text_hint"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:id="@+id/tvGonganNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="浙公网安备XXXXXX号"
+            android:textSize="12sp"
+            android:textColor="@color/text_hint"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"/>
+    </LinearLayout>
+
 </LinearLayout>
+
