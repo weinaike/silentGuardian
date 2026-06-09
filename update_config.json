@@ -1,8 +1,8 @@
 {
-  "latestVersionCode": 8,
-  "latestVersionName": "0.1.6",
+  "latestVersionCode": 9,
+  "latestVersionName": "0.1.7",
   "forceUpdate": false,
-  "updateTitle": "发现新版本 v0.1.6",
-  "updateMessage": "• 修复了手动检查更新时，如果是最新版本却没有提示反馈的体验缺陷\n• 修复了网络底层可能会缓存旧版本更新配置的隐患，保证未来更新及时送达\n• 暂时下线了启动页空广告，实现应用秒开\n• 各种底层的稳定性修复",
-  "downloadUrl": "https://www.yes-tek.com/asset/apk/SilentGuardian_v0.1.6.apk"
+  "updateTitle": "发现新版本 v0.1.7",
+  "updateMessage": "• 接入多语言国际化框架，支持中文与英文切换\n• 设置页新增语言切换入口，可手动切换或跟随系统\n• 提取全部 UI 文本至资源文件，为后续更多语言扩展打下基础\n• Android 13+ 系统设置中可单独配置 App 语言",
+  "downloadUrl": "https://www.yes-tek.com/asset/apk/SilentGuardian_v0.1.7.apk"
 }
