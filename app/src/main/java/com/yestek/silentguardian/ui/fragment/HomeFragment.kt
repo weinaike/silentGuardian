@@ -58,22 +58,36 @@ class HomeFragment : Fragment() {
         llSessionCard = view.findViewById(R.id.llSessionCard)
         tvSessionTitle = view.findViewById(R.id.tvSessionTitle)
         
-        switchService.setOnCheckedChangeListener { _, isChecked ->
-            DataManager.isServiceEnabled = isChecked
-            updateServiceCardUI(isChecked)
-            
-            if (isChecked) {
-                requireContext().startService(Intent(requireContext(), MonitorService::class.java))
-            }
-        }
+        // The listener will be set in onResume to avoid premature triggering
+
 
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        updateServiceCardUI(DataManager.isServiceEnabled)
-        switchService.isChecked = DataManager.isServiceEnabled
+        val isEnabled = DataManager.isServiceEnabled
+        updateServiceCardUI(isEnabled)
+        
+        switchService.setOnCheckedChangeListener(null)
+        switchService.isChecked = isEnabled
+        switchService.setOnCheckedChangeListener { _, isChecked ->
+            DataManager.isServiceEnabled = isChecked
+            updateServiceCardUI(isChecked)
+            if (isChecked) {
+                androidx.core.content.ContextCompat.startForegroundService(requireContext(), Intent(requireContext(), MonitorService::class.java))
+            } else {
+                requireContext().stopService(Intent(requireContext(), MonitorService::class.java))
+            }
+        }
+        
+        // Ensure the service state matches the data manager state on every resume
+        if (isEnabled) {
+            androidx.core.content.ContextCompat.startForegroundService(requireContext(), Intent(requireContext(), MonitorService::class.java))
+        } else {
+            requireContext().stopService(Intent(requireContext(), MonitorService::class.java))
+        }
+
         refreshManagedApps()
         startUIRefreshLoop()
     }

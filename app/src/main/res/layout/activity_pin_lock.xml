@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="#F5F5F5"
+    android:background="@color/background"
     android:padding="24dp">
 
     <ImageView
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColor="#D32F2F"
+        android:textColor="@color/danger"
         android:textSize="14sp"
         android:visibility="invisible"
         android:text="密码错误，请重试" />

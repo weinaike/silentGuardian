@@ -25,6 +25,10 @@ object DataManager {
         get() = kv.decodeStringSet("managedApps", emptySet()) ?: emptySet()
         set(value) { kv.encode("managedApps", value) }
 
+    var hasAutoInitializedApps: Boolean
+        get() = kv.decodeBool("hasAutoInitializedApps", false)
+        set(value) { kv.encode("hasAutoInitializedApps", value) }
+
     // Phase 6: Security PIN
     var appPinCode: String
         get() = kv.decodeString("appPinCode", "") ?: ""

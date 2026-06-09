@@ -1,8 +1,8 @@
 {
-  "latestVersionCode": 6,
-  "latestVersionName": "0.1.4",
+  "latestVersionCode": 7,
+  "latestVersionName": "0.1.5",
   "forceUpdate": false,
-  "updateTitle": "发现新版本 v0.1.4",
-  "updateMessage": "• 优化弹窗样式，统一为 Material Design 圆角风格\n• 权限引导新增关键词高亮，操作更清晰\n• 弹窗按钮放大，触控体验更舒适\n• 补充完整隐私政策及「关于」二级菜单\n• 全面合规，内部包名升级为 com.yestek.silentguardian",
-  "downloadUrl": "https://www.yes-tek.com/asset/apk/SilentGuardian_v0.1.4.apk"
+  "updateTitle": "发现新版本 v0.1.5",
+  "updateMessage": "• 修复了首次安装/更新后后台守护进程无法自动唤醒的 Bug\n• 新增对豆包、腾讯元宝的智能初装预设\n• 修复了因其他应用事件拦截导致 100% 漏计时的严重 Bug\n• 全面适配暗色模式和各类小屏幕设备",
+  "downloadUrl": "https://www.yes-tek.com/asset/apk/SilentGuardian_v0.1.5.apk"
 }

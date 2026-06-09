@@ -106,6 +106,26 @@ class SplashActivity : AppCompatActivity() {
         
         // 在用户同意后，才初始化第三方 SDK 和数据管理器
         MMKV.initialize(applicationContext)
+
+        if (!com.yestek.silentguardian.manager.DataManager.hasAutoInitializedApps) {
+            val pm = packageManager
+            val autoApps = mutableSetOf<String>()
+            try {
+                pm.getPackageInfo("com.larus.nova", 0)
+                autoApps.add("com.larus.nova")
+            } catch (e: Exception) {}
+            try {
+                pm.getPackageInfo("com.tencent.hunyuan.app.chat", 0)
+                autoApps.add("com.tencent.hunyuan.app.chat")
+            } catch (e: Exception) {}
+            
+            if (autoApps.isNotEmpty()) {
+                val currentApps = com.yestek.silentguardian.manager.DataManager.managedApps.toMutableSet()
+                currentApps.addAll(autoApps)
+                com.yestek.silentguardian.manager.DataManager.managedApps = currentApps
+            }
+            com.yestek.silentguardian.manager.DataManager.hasAutoInitializedApps = true
+        }
         
         // 判断是否需要引导权限
         val intent = if (!com.yestek.silentguardian.manager.DataManager.isServiceEnabled) {

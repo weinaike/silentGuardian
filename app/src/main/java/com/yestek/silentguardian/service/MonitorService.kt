@@ -370,35 +370,25 @@ class MonitorService : Service() {
         return isAnyActive
     }
 
-    /**
-     * 查找指定时刻哪个受管 App 在前台。
-     * 通过查询之前一段时间的事件，倒序找最近的 ACTIVITY_RESUMED。
-     */
     private fun findForegroundAppAt(timestamp: Long): String? {
         val usm = usageStatsManager
         // 往前查 1 小时的事件来确定初始状态
         val lookbackStart = timestamp - 3600_000L
         val events = usm.queryEvents(lookbackStart, timestamp)
 
-        val eventList = mutableListOf<UsageEvents.Event>()
+        var currentFg: String? = null
         while (events.hasNextEvent()) {
             val e = UsageEvents.Event()
             events.getNextEvent(e)
-            eventList.add(e)
-        }
-
-        // 倒序找最近的 RESUMED（确定当时的前台 App），返回 rawPackageName
-        for (i in eventList.indices.reversed()) {
-            val e = eventList[i]
-            if (e.eventType == 1) {
-                return e.packageName
-            }
-            // 如果先遇到离开前台的事件，说明那一刻没有 App 在前台（或在桌面）
-            if (e.eventType == 2 || e.eventType == 3 || e.eventType == 23 || e.eventType == 24) {
-                return null
+            if (e.eventType == 1) { // ACTIVITY_RESUMED
+                currentFg = e.packageName
+            } else if (e.eventType == 2 || e.eventType == 3 || e.eventType == 23 || e.eventType == 24) {
+                if (currentFg == e.packageName) {
+                    currentFg = null
+                }
             }
         }
-        return null
+        return currentFg
     }
 
     // ========================================================================

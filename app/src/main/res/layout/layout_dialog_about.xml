@@ -34,7 +34,7 @@
             android:textColor="@color/text_primary"/>
     </LinearLayout>
 
-    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginHorizontal="16dp"/>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/outline" android:layout_marginHorizontal="16dp"/>
 
     <!-- 撤回同意 -->
     <LinearLayout
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:text="撤回隐私协议授权"
             android:textSize="16sp"
-            android:textColor="#F44336"/>
+            android:textColor="@color/danger"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:layout_marginTop="2dp"/>
     </LinearLayout>
 
-    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginHorizontal="16dp"/>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/outline" android:layout_marginHorizontal="16dp"/>
 
     <!-- 检查更新 -->
     <LinearLayout
@@ -89,7 +89,7 @@
             android:layout_marginTop="2dp"/>
     </LinearLayout>
 
-    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginHorizontal="16dp"/>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/outline" android:layout_marginHorizontal="16dp"/>
 
     <!-- 公司信息与备案号 -->
     <LinearLayout
