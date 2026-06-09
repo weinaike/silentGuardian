@@ -1,8 +1,8 @@
 {
-  "latestVersionCode": 7,
-  "latestVersionName": "0.1.5",
+  "latestVersionCode": 8,
+  "latestVersionName": "0.1.6",
   "forceUpdate": false,
-  "updateTitle": "发现新版本 v0.1.5",
-  "updateMessage": "• 修复了首次安装/更新后后台守护进程无法自动唤醒的 Bug\n• 新增对豆包、腾讯元宝的智能初装预设\n• 修复了因其他应用事件拦截导致 100% 漏计时的严重 Bug\n• 全面适配暗色模式和各类小屏幕设备",
-  "downloadUrl": "https://www.yes-tek.com/asset/apk/SilentGuardian_v0.1.5.apk"
+  "updateTitle": "发现新版本 v0.1.6",
+  "updateMessage": "• 修复了手动检查更新时，如果是最新版本却没有提示反馈的体验缺陷\n• 修复了网络底层可能会缓存旧版本更新配置的隐患，保证未来更新及时送达\n• 暂时下线了启动页空广告，实现应用秒开\n• 各种底层的稳定性修复",
+  "downloadUrl": "https://www.yes-tek.com/asset/apk/SilentGuardian_v0.1.6.apk"
 }

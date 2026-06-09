@@ -183,8 +183,9 @@ class OtherFragment : Fragment() {
 
         view.findViewById<View>(R.id.llCheckUpdate)?.setOnClickListener {
             dialog.dismiss()
-            Toast.makeText(requireContext(), "正在检查更新...", Toast.LENGTH_SHORT).show()
-            com.yestek.silentguardian.utils.UpdateManager.checkUpdate(requireActivity())
+            android.widget.Toast.makeText(requireContext(), "正在检查更新...", android.widget.Toast.LENGTH_SHORT).show()
+            // 用户主动点击时，显示 Toast 反馈
+            com.yestek.silentguardian.utils.UpdateManager.checkUpdate(requireActivity(), true)
         }
 
         dialog.show()

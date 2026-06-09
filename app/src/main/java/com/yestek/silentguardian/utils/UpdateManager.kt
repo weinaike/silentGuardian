@@ -22,14 +22,15 @@ object UpdateManager {
     private const val TAG = "UpdateManager"
     private const val UPDATE_URL = "https://www.yes-tek.com/asset/apk/update_config.json"
 
-    fun checkUpdate(activity: Activity) {
+    fun checkUpdate(activity: Activity, showToast: Boolean = false) {
         MainScope().launch {
             try {
                 val jsonResult = withContext(Dispatchers.IO) {
                     fetchUpdateConfig()
                 }
                 
-                jsonResult?.let { json ->
+                if (jsonResult != null) {
+                    val json = jsonResult
                     val latestVersionCode = json.optInt("latestVersionCode", 0)
                     val forceUpdate = json.optBoolean("forceUpdate", false)
                     val updateTitle = json.optString("updateTitle", "发现新版本")
@@ -40,18 +41,24 @@ object UpdateManager {
                     
                     Log.d(TAG, "Current version: $currentVersionCode, Latest version: $latestVersionCode")
 
-                    // 严格按照大于判断。如果要测试，请在服务端把 latestVersionCode 改为 2 或者以上
                     if (latestVersionCode > currentVersionCode) {
                         val ignoredVersion = com.tencent.mmkv.MMKV.defaultMMKV().decodeInt("ignored_update_version", 0)
-                        if (!forceUpdate && latestVersionCode == ignoredVersion) {
+                        if (!forceUpdate && latestVersionCode == ignoredVersion && !showToast) {
                             Log.d(TAG, "Update $latestVersionCode was ignored by user, skipping prompt.")
-                            return@let
+                            return@launch
                         }
                         showUpdateDialog(activity, updateTitle, updateMessage, downloadUrl, forceUpdate, latestVersionCode)
+                    } else if (showToast) {
+                        android.widget.Toast.makeText(activity, "当前已是最新版本", android.widget.Toast.LENGTH_SHORT).show()
                     }
+                } else if (showToast) {
+                    android.widget.Toast.makeText(activity, "检查更新失败，请检查网络", android.widget.Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Check update failed", e)
+                if (showToast) {
+                    android.widget.Toast.makeText(activity, "检查更新出错了", android.widget.Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -62,6 +69,7 @@ object UpdateManager {
             val url = URL(UPDATE_URL)
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
+            connection.useCaches = false
             connection.connectTimeout = 5000
             connection.readTimeout = 5000
 
