@@ -58,8 +58,8 @@
 
 为了统一下发更新配置与分发包，遵循以下维护规范：
 - **APK 发布位置**: 定期将构建好的 apk 包上传至阿里云服务器 `admin@47.237.161.121` 的 `/home/admin/gost/brand/apk` 目录下。
-- **配置维护 (Submodule)**: 本地通过引入子模块 `gitee_release` 统一管理和更新发布配置。该配置项目位于 `https://gitee.com/weinaike/silentGuardian`，重点维护其中的 `update_config.json` 文件以触发端侧更新。
-- **Gitee Token 凭据**: 更新配置仓库时需要鉴权。请使用 Git 的 Credential Helper 进行本地持久化保存，或者在部署前配置环境变量。严禁将私人 Token 明文提交到任何文档或代码中！
+- **配置维护**: 版本更新配置统一由项目根目录的 `update_config.json` 维护。每次发布时，`deploy.sh` 会读取此文件并将最新版本信息 scp 上传至服务器同一目录，APK 和配置 JSON 集中在一处管理。
+- **端侧拉取地址**: App 通过 `https://www.yes-tek.com/asset/apk/update_config.json` 拉取更新配置。
 
 ### 6.1 发版标准流程（每次发布必须严格按此步骤执行）
 
@@ -90,8 +90,7 @@ bash deploy.sh
 1. 读取 `build.gradle.kts` 中的版本号
 2. 执行 `gradle assembleRelease` 编译签名包
 3. `scp` 上传至阿里云 `/home/admin/gost/brand/apk/SilentGuardian_v<版本号>.apk`
-4. 自动更新 `gitee_release/update_config.json`（版本号 + 下载链接）
-5. `git commit` + `git push` 至 Gitee，触发端侧检查更新
+4. 读取根目录 `update_config.json` 中的字段，生成含最新版本号与下载链接的 JSON，scp 上传覆盖服务器上的 `update_config.json`
 
 **第四步（可选）：将主仓库 tag 打上**
 

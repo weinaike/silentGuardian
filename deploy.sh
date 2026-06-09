@@ -4,9 +4,8 @@
 # SilentGuardian - 一键部署发布脚本
 # 1. 提取 build.gradle.kts 中的版本号
 # 2. 编译 Release APK
-# 3. SCP 上传到阿里云服务器
-# 4. 更新 gitee_release 中的 update_config.json
-# 5. Push 到 Gitee
+# 3. SCP 上传 APK 到阿里云服务器
+# 4. 生成 update_config.json 并上传到服务器
 # ==========================================================
 
 # 颜色高亮
@@ -35,46 +34,65 @@ if [ ! -f "$APK_PATH" ]; then
 fi
 
 echo -e "\n${GREEN}>>> 3. 上传 APK 到阿里云服务器...${NC}"
-# 注意: ssh -o ServerAliveInterval=60 admin@47.237.161.121
 TARGET_APK_NAME="SilentGuardian_v${VERSION_NAME}.apk"
-scp -o StrictHostKeyChecking=no -o BatchMode=yes -o ServerAliveInterval=60 "$APK_PATH" admin@47.237.161.121:/home/admin/gost/brand/apk/$TARGET_APK_NAME
+REMOTE_HOST="admin@47.237.161.121"
+REMOTE_APK_DIR="/home/admin/gost/brand/apk"
+DOWNLOAD_BASE_URL="https://www.yes-tek.com/asset/apk"
+
+scp -o StrictHostKeyChecking=no -o BatchMode=yes -o ServerAliveInterval=60 \
+    "$APK_PATH" "${REMOTE_HOST}:${REMOTE_APK_DIR}/${TARGET_APK_NAME}"
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}APK 上传失败！请检查服务器连接。${NC}"
     exit 1
 fi
+echo "APK 已上传: ${REMOTE_APK_DIR}/${TARGET_APK_NAME}"
 
-echo -e "\n${GREEN}>>> 4. 更新配置文件...${NC}"
-CONFIG_FILE="gitee_release/update_config.json"
-# 简单的文本替换更新 versionCode 和 versionName
-if [ -f "$CONFIG_FILE" ]; then
-    sed -i '' -E "s/\"latestVersionCode\": [0-9]+/\"latestVersionCode\": ${VERSION_CODE}/" "$CONFIG_FILE"
-    sed -i '' -E "s/\"latestVersionName\": \"[^\"]+\"/\"latestVersionName\": \"${VERSION_NAME}\"/" "$CONFIG_FILE"
-    sed -i '' -E "s|\"downloadUrl\": \"[^\"]+\"|\"downloadUrl\": \"https://www.yes-tek.com/asset/apk/${TARGET_APK_NAME}\"|" "$CONFIG_FILE"
-    echo "配置文件已更新 (含版本与下载链接)。"
-else
-    echo -e "${RED}未找到 $CONFIG_FILE！请确认 gitee_release 子模块已正确初始化。${NC}"
+echo -e "\n${GREEN}>>> 4. 更新并上传本地 update_config.json...${NC}"
+
+LOCAL_CONFIG="update_config.json"
+if [ ! -f "$LOCAL_CONFIG" ]; then
+    echo -e "${RED}未找到本地 $LOCAL_CONFIG 文件！请先在根目录创建。${NC}"
     exit 1
 fi
 
-echo -e "\n${GREEN}>>> 5. 提交并推送配置到 Gitee...${NC}"
-cd gitee_release || exit 1
-git add update_config.json
+# 更新本地配置文件的版本信息和下载链接
+sed -i '' -E "s/\"latestVersionCode\": [0-9]+/\"latestVersionCode\": ${VERSION_CODE}/" "$LOCAL_CONFIG"
+sed -i '' -E "s/\"latestVersionName\": \"[^\"]+\"/\"latestVersionName\": \"${VERSION_NAME}\"/" "$LOCAL_CONFIG"
+sed -i '' -E "s|\"downloadUrl\": \"[^\"]+\"|\"downloadUrl\": \"${DOWNLOAD_BASE_URL}/${TARGET_APK_NAME}\"|" "$LOCAL_CONFIG"
 
-# 检查是否有改动
-if git diff-index --quiet HEAD --; then
-    echo "配置文件无内容变动，跳过推送。"
-else
-    git commit -m "chore: release version v$VERSION_NAME"
-    # 使用 token 推送
-    git push origin master
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}推送到 Gitee 失败！${NC}"
-        exit 1
-    fi
-    echo "配置更新成功推送至 Gitee！"
+echo "更新后的 $LOCAL_CONFIG 内容："
+cat "$LOCAL_CONFIG"
+
+scp -o StrictHostKeyChecking=no -o BatchMode=yes -o ServerAliveInterval=60 \
+    "$LOCAL_CONFIG" "${REMOTE_HOST}:${REMOTE_APK_DIR}/update_config.json"
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}update_config.json 上传失败！${NC}"
+    exit 1
 fi
 
-cd ..
+# 强制修复远程文件权限为全局可读，彻底解决 Nginx 403 问题
+ssh -o StrictHostKeyChecking=no -o BatchMode=yes "${REMOTE_HOST}" "chmod 644 ${REMOTE_APK_DIR}/update_config.json"
+echo "update_config.json 已上传至 ${REMOTE_APK_DIR}/update_config.json"
+echo "对外访问地址: ${DOWNLOAD_BASE_URL}/update_config.json"
+
+# ================= 新增：上传 ad_config.json =================
+LOCAL_AD_CONFIG="ad_config.json"
+if [ -f "$LOCAL_AD_CONFIG" ]; then
+    echo -e "\n${GREEN}>>> 5. 上传本地 ad_config.json...${NC}"
+    scp -o StrictHostKeyChecking=no -o BatchMode=yes -o ServerAliveInterval=60 \
+        "$LOCAL_AD_CONFIG" "${REMOTE_HOST}:${REMOTE_APK_DIR}/ad_config.json"
+    
+    if [ $? -eq 0 ]; then
+        ssh -o StrictHostKeyChecking=no -o BatchMode=yes "${REMOTE_HOST}" "chmod 644 ${REMOTE_APK_DIR}/ad_config.json"
+        echo "ad_config.json 已上传至 ${REMOTE_APK_DIR}/ad_config.json"
+        echo "对外访问地址: ${DOWNLOAD_BASE_URL}/ad_config.json"
+    else
+        echo -e "${RED}ad_config.json 上传失败！${NC}"
+    fi
+else
+    echo -e "\n${RED}未找到本地 $LOCAL_AD_CONFIG 文件，跳过上传广告配置。${NC}"
+fi
 
 echo -e "\n${GREEN}✅ 部署全部完成！(v$VERSION_NAME)${NC}"

@@ -20,7 +20,7 @@ import java.net.URL
 
 object UpdateManager {
     private const val TAG = "UpdateManager"
-    private const val UPDATE_URL = "https://raw.giteeusercontent.com/weinaike/silentGuardian/raw/master/update_config.json?metadata=eyJyIjoibWFzdGVyIiwiZnAiOiJ1cGRhdGVfY29uZmlnLmpzb24iLCJ1aWQiOjE0MzA1OTE0LCJwaWQiOjQ4MzAzMTAzLCJzdG8iOiJnaXQtc2hhcmRpbmctc3RvLTEwdC0wNTYiLCJycCI6InJlcG9zLzY5L2IyLzY5YjIyNmU1ZWZmYTBkNmY4ZTVjM2RkNGVlYjIxZDg5NGI5YjAzNjg3NzlmNWFjZGFiNGZhZjk2YzZkNDBhNmQuZ2l0IiwiaXNwIjp0cnVlLCJleHBpcmVfYXQiOjE3ODA4NDgwMDB9&signature=R2fHnMAilWDkE22nE05_twF3yfn-B97ZREwJ52UDaJ0"
+    private const val UPDATE_URL = "https://www.yes-tek.com/asset/apk/update_config.json"
 
     fun checkUpdate(activity: Activity) {
         MainScope().launch {

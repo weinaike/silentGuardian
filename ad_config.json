@@ -1,0 +1,9 @@
+{
+  "adEnabled": true,
+  "splashAd": {
+    "enabled": true,
+    "type": "webview",
+    "adUrl": "https://www.yes-tek.com",
+    "durationSeconds": 3
+  }
+}

@@ -1,15 +1,30 @@
 package com.yestek.silentguardian.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import android.view.View
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.yestek.silentguardian.MainActivity
-import com.yestek.silentguardian.manager.DataManager
+import androidx.lifecycle.lifecycleScope
 import com.tencent.mmkv.MMKV
+import com.yestek.silentguardian.MainActivity
+import com.yestek.silentguardian.R
+import com.yestek.silentguardian.utils.AdManager
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
+@SuppressLint("SetJavaScriptEnabled")
 class SplashActivity : AppCompatActivity() {
+
+    private var countdownJob: Job? = null
+    private var isStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +33,55 @@ class SplashActivity : AppCompatActivity() {
         val isPrivacyAccepted = sp.getBoolean("is_privacy_accepted", false)
 
         if (isPrivacyAccepted) {
-            initAppAndStart()
+            checkAndShowAd()
         } else {
             showPrivacyDialog()
+        }
+    }
+
+    private fun checkAndShowAd() {
+        lifecycleScope.launch {
+            val adConfig = withTimeoutOrNull(2000L) {
+                AdManager.fetchSplashAdConfig()
+            }
+            
+            if (adConfig != null && adConfig.enabled && adConfig.adUrl.isNotEmpty()) {
+                showAdAndStartCountdown(adConfig.adUrl, adConfig.durationSeconds)
+            } else {
+                initAppAndStart()
+            }
+        }
+    }
+
+    private fun showAdAndStartCountdown(url: String, duration: Int) {
+        setContentView(R.layout.activity_splash)
+        
+        val webView = findViewById<WebView>(R.id.webViewAd)
+        val tvSkipAd = findViewById<TextView>(R.id.tvSkipAd)
+        
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                view?.loadUrl(url ?: "")
+                return true
+            }
+        }
+        webView.webChromeClient = WebChromeClient()
+        
+        webView.loadUrl(url)
+        
+        tvSkipAd.visibility = View.VISIBLE
+        tvSkipAd.setOnClickListener {
+            countdownJob?.cancel()
+            initAppAndStart()
+        }
+        
+        countdownJob = lifecycleScope.launch {
+            for (i in duration downTo 1) {
+                tvSkipAd.text = "跳过 $i"
+                delay(1000)
+            }
+            initAppAndStart()
         }
     }
 
@@ -31,7 +92,7 @@ class SplashActivity : AppCompatActivity() {
             .setCancelable(false)
             .setPositiveButton("同意") { _, _ ->
                 getSharedPreferences("app_config", Context.MODE_PRIVATE).edit().putBoolean("is_privacy_accepted", true).apply()
-                initAppAndStart()
+                checkAndShowAd()
             }
             .setNegativeButton("不同意并退出") { _, _ ->
                 finish()
@@ -40,6 +101,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun initAppAndStart() {
+        if (isStarted) return
+        isStarted = true
+        
         // 在用户同意后，才初始化第三方 SDK 和数据管理器
         MMKV.initialize(applicationContext)
         
