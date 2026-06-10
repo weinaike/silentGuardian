@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.yestek.silentguardian.R
 import com.yestek.silentguardian.manager.DataManager
 
-class AppSelectActivity : Activity() {
+class AppSelectActivity : androidx.appcompat.app.AppCompatActivity() {
 
     private lateinit var llBack: LinearLayout
     private lateinit var btnSave: Button

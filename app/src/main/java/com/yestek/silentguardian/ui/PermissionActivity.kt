@@ -20,7 +20,7 @@ import com.yestek.silentguardian.receiver.AdminReceiver
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 
-class PermissionActivity : Activity() {
+class PermissionActivity : androidx.appcompat.app.AppCompatActivity() {
 
     private lateinit var llPermissions: LinearLayout
     private lateinit var btnEnter: Button
