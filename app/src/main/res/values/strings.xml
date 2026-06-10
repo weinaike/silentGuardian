@@ -145,6 +145,11 @@
     <!-- Device Admin -->
     <string name="device_admin_explanation">开启后可以防止应用被意外卸载或强行停止。</string>
 
+    <!-- Bottom Navigation -->
+    <string name="nav_permission">权限</string>
+    <string name="nav_home">主页</string>
+    <string name="nav_settings">设置</string>
+
     <!-- Format helpers -->
     <string name="time_format_mm_ss">%02d:%02d</string>
 </resources>

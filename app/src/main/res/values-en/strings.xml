@@ -145,6 +145,11 @@
     <!-- Device Admin -->
     <string name="device_admin_explanation">Prevent the app from being accidentally uninstalled or forcibly stopped.</string>
 
+    <!-- Bottom Navigation -->
+    <string name="nav_permission">Permissions</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_settings">Settings</string>
+
     <!-- Format helpers -->
     <string name="time_format_mm_ss">%02d:%02d</string>
 </resources>

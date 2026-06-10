@@ -3,13 +3,13 @@
     <item
         android:id="@+id/navigation_permission"
         android:icon="@android:drawable/ic_menu_manage"
-        android:title="权限" />
+        android:title="@string/nav_permission" />
     <item
         android:id="@+id/navigation_home"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="主页" />
+        android:title="@string/nav_home" />
     <item
         android:id="@+id/navigation_other"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:title="设置" />
+        android:title="@string/nav_settings" />
 </menu>
