@@ -34,10 +34,10 @@ if [ ! -f "$APK_PATH" ]; then
 fi
 
 echo -e "\n${GREEN}>>> 3. 上传 APK 到阿里云服务器...${NC}"
-TARGET_APK_NAME="SilentGuardian_v${VERSION_NAME}.apk"
+TARGET_APK_NAME="SilentGuardian.apk"
 REMOTE_HOST="admin@47.237.161.121"
-REMOTE_APK_DIR="/home/admin/gost/brand/apk"
-DOWNLOAD_BASE_URL="https://www.yes-tek.com/asset/apk"
+REMOTE_APK_DIR="/home/admin/website/assets/apk"
+DOWNLOAD_BASE_URL="https://www.yes-tek.com/assets/apk"
 
 scp -o StrictHostKeyChecking=no -o BatchMode=yes -o ServerAliveInterval=60 \
     "$APK_PATH" "${REMOTE_HOST}:${REMOTE_APK_DIR}/${TARGET_APK_NAME}"

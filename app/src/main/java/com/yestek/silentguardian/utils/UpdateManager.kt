@@ -21,7 +21,7 @@ import java.net.URL
 
 object UpdateManager {
     private const val TAG = "UpdateManager"
-    private const val UPDATE_URL = "https://www.yes-tek.com/asset/apk/update_config.json"
+    private const val UPDATE_URL = "https://www.yes-tek.com/assets/apk/update_config.json"
 
     fun checkUpdate(activity: Activity, showToast: Boolean = false) {
         MainScope().launch {

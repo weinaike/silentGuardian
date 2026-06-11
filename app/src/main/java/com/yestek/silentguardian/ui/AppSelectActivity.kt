@@ -16,7 +16,7 @@ class AppSelectActivity : androidx.appcompat.app.AppCompatActivity() {
     private lateinit var btnSave: Button
     private lateinit var llAppList: LinearLayout
 
-    private val allCandidateApps = listOf("豆包", "腾讯元宝", "Kimi", "文心一言", "通义千问")
+    private val allCandidateApps = listOf("豆包", "腾讯元宝", "Kimi", "文心一言", "通义千问", "ChatGPT", "Gemini")
     private var currentSelectedApps = mutableSetOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

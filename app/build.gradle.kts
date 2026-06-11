@@ -11,8 +11,8 @@ android {
         applicationId = "com.yestek.silentguardian"
         minSdk = 24
         targetSdk = 34
-        versionCode = 10
-        versionName = "0.1.8"
+        versionCode = 11
+        versionName = "0.1.9"
     }
 
     signingConfigs {
@@ -62,6 +62,7 @@ dependencies {
     implementation("com.tencent:mmkv:1.3.3") // 极速本地存储
     implementation("com.github.getActivity:XXPermissions:18.6") // 权限管理框架
     implementation("com.blankj:utilcodex:1.31.1") // 基础工具库
+    implementation("com.microsoft.clarity:clarity:3.+") // Microsoft Clarity
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

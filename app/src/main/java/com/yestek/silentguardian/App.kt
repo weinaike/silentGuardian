@@ -11,6 +11,9 @@ class App : Application() {
         val sp = getSharedPreferences("app_config", android.content.Context.MODE_PRIVATE)
         if (sp.getBoolean("is_privacy_accepted", false)) {
             MMKV.initialize(this)
+            
+            val config = com.microsoft.clarity.ClarityConfig("x54dzfq4fm")
+            com.microsoft.clarity.Clarity.initialize(applicationContext, config)
         }
         
         // 全局异常捕获，兜底恢复网络

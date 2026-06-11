@@ -18,7 +18,7 @@ data class SplashAdConfig(
 object AdManager {
     private const val TAG = "AdManager"
     
-    private const val AD_CONFIG_URL = "https://www.yes-tek.com/asset/apk/ad_config.json"
+    private const val AD_CONFIG_URL = "https://www.yes-tek.com/assets/apk/ad_config.json"
 
     suspend fun fetchSplashAdConfig(): SplashAdConfig? {
         return withContext(Dispatchers.IO) {

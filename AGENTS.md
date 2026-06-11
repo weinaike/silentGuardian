@@ -59,7 +59,7 @@
 为了统一下发更新配置与分发包，遵循以下维护规范：
 - **APK 发布位置**: 定期将构建好的 apk 包上传至阿里云服务器 `admin@47.237.161.121` 的 `/home/admin/gost/brand/apk` 目录下。
 - **配置维护**: 版本更新配置统一由项目根目录的 `update_config.json` 维护。每次发布时，`deploy.sh` 会读取此文件并将最新版本信息 scp 上传至服务器同一目录，APK 和配置 JSON 集中在一处管理。
-- **端侧拉取地址**: App 通过 `https://www.yes-tek.com/asset/apk/update_config.json` 拉取更新配置。
+- **端侧拉取地址**: App 通过 `https://www.yes-tek.com/assets/apk/update_config.json` 拉取更新配置。
 
 ### 6.1 发版标准流程（每次发布必须严格按此步骤执行）
 
@@ -108,5 +108,5 @@ git push origin v<versionName>
 | `forceUpdate` | `true` 表示强制更新，用户无法跳过；一般设为 `false` |
 | `updateTitle` | 更新弹窗标题，建议写 `发现新版本 v<版本号>` |
 | `updateMessage` | 更新日志，支持 `\n` 换行，列出本版本改动要点 |
-| `downloadUrl` | APK 下载直链，格式固定为 `https://www.yes-tek.com/asset/apk/SilentGuardian_v<版本号>.apk` |
+| `downloadUrl` | APK 下载直链，格式固定为 `https://www.yes-tek.com/assets/apk/SilentGuardian.apk` |
 
