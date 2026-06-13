@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -30,7 +31,7 @@
         android:paddingHorizontal="24dp"
         android:paddingBottom="16dp">
 
-        <!-- 每日总时长 -->
+        <!-- 睡眠安息模式 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,29 +40,169 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_daily_limit"
+                android:text="睡眠安息模式"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textStyle="bold"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
-            <TextView
-                android:id="@+id/tvDailyLimit"
+            <Switch
+                android:id="@+id/switchSleepMode"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_minutes_format"
-                android:textColor="@color/primary"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
-        <SeekBar
-            android:id="@+id/sbDailyLimit"
+
+        <LinearLayout
+            android:id="@+id/llSleepTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="8dp"
-            android:progressTint="@color/primary"
-            android:thumbTint="@color/primary"/>
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/tvSleepStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:gravity="center"
+                android:background="@drawable/bg_time_picker"
+                android:text="22:00"
+                android:textColor="@color/primary"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 至 "
+                android:paddingHorizontal="8dp"/>
+            <TextView
+                android:id="@+id/tvSleepEnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:gravity="center"
+                android:background="@drawable/bg_time_picker"
+                android:text="08:00"
+                android:textColor="@color/primary"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="16dp"
+            android:background="@color/outline" />
+
+        <!-- 模式切换 -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedButton="@+id/btnUnified">
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUnified"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="统一额度"
+                style="?attr/materialButtonOutlinedStyle" />
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSplit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="工作日 / 周末"
+                style="?attr/materialButtonOutlinedStyle" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <!-- 每日总时长 (工作日/统一) -->
+        <LinearLayout
+            android:id="@+id/llDailyLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/tvDailyLimitTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_daily_limit"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/tvDailyLimit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_minutes_format"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+            <SeekBar
+                android:id="@+id/sbDailyLimit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:progressTint="@color/primary"
+                android:thumbTint="@color/primary"/>
+        </LinearLayout>
+
+        <!-- 周末总时长 (仅拆分模式显示) -->
+        <LinearLayout
+            android:id="@+id/llWeekendLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="周末每日总时长"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/tvWeekendLimit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_minutes_format"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+            <SeekBar
+                android:id="@+id/sbWeekendLimit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:progressTint="@color/primary"
+                android:thumbTint="@color/primary"/>
+        </LinearLayout>
 
         <!-- 每次连续使用上限 -->
         <LinearLayout

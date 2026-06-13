@@ -200,6 +200,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateSessionUI() {
+        if (DataManager.isCurrentlyInSleepMode()) {
+            llSessionCard.setBackgroundColor(android.graphics.Color.parseColor("#1A237E"))
+            tvSessionTitle.text = getString(R.string.home_sleep_mode_title)
+            tvSessionTitle.setTextColor(android.graphics.Color.WHITE)
+            tvSessionMinutes.text = "Zzz"
+            tvSessionLimit.text = " / ${getString(R.string.home_sleep_mode_desc)}"
+            pbSessionUsage.progress = 100
+            tvCooldownStatus.visibility = View.VISIBLE
+            tvCooldownStatus.text = getString(R.string.home_sleep_mode_status)
+            return
+        }
+
         val totalUsedSecs = DataManager.getGlobalUsedSecondsToday()
         val totalLimitSecs = DataManager.dailyTotalLimitMinutes * 60
         val isTotalExhausted = totalLimitSecs > 0 && totalUsedSecs >= totalLimitSecs

@@ -185,14 +185,30 @@ class MonitorService : Service() {
 
                 val currentTime = System.currentTimeMillis()
 
+                // 熔断机制 (Failsafe)
+                // 如果系统发生深度休眠 (Doze) 或被强杀导致轮询间隔异常大（>30秒）
+                // 必须丢弃这期间的时间，重新对齐基准线，解决“隔天休眠唤醒后时间暴增/无法刷新” Bug
+                val lastSettled = DataManager.lastSettledTimestamp
+                if (lastSettled > 0 && currentTime - lastSettled > 30_000L) {
+                    DataManager.lastSettledTimestamp = currentTime
+                    voiceSessions.values.forEach { it.lastSettledTime = currentTime }
+                    Log.d(TAG, "Large delay/Doze detected. Discarding time gap.")
+                }
+
                 // 3. 跨日检测：如果跨日了，重置结算时间戳
                 val todayStart = getTodayStartMillis()
                 if (DataManager.lastSettledTimestamp < todayStart) {
                     DataManager.lastSettledTimestamp = todayStart
                 }
 
-                // 4. Pre-check 全局阻断（条件 A & B）
+                // 4. Pre-check 全局阻断（条件 A & B & C）
                 var isGlobalBlocked = false
+                
+                // C: 睡眠安息模式判断
+                if (DataManager.isCurrentlyInSleepMode()) {
+                    isGlobalBlocked = true
+                }
+                
                 val totalGlobalSecs = DataManager.getGlobalUsedSecondsToday()
                 val dailyLimitSecs = DataManager.dailyTotalLimitMinutes * 60
                 val cooldownEnd = DataManager.cooldownEndTime
@@ -214,6 +230,8 @@ class MonitorService : Service() {
                     // 全局阻断期间跳过计时，但必须推进结算时间戳
                     // 否则解封后 settleScreenTime 会追溯整个阻断期的事件，造成时间虚增
                     DataManager.lastSettledTimestamp = currentTime
+                    // 彻底清空语音会话，切断积累的时间，防止阻断解封后把僵尸服务的时间全加进去
+                    voiceSessions.clear()
                 }
 
                 // 6. 连续使用与闲置重置
@@ -407,18 +425,25 @@ class MonitorService : Service() {
         // 根据最新状态，刷新所有仍活跃的前台服务对应的会话
         // activeFgServices 里面存放的是 rawPackageName，需要先映射回 canonical
         val activeCanonicalServices = activeFgServices.map { packageAliases.getOrDefault(it, it) }.toSet()
+        
+        val powerManager = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+        val isScreenOn = powerManager.isInteractive
 
         for (pkg in activeCanonicalServices) {
             val session = voiceSessions[pkg]
             if (session != null) {
                 session.lastPlaybackTime = currentTime
             } else {
-                voiceSessions[pkg] = VoiceSession(
-                    packageName = pkg,
-                    sessionStartTime = currentTime,
-                    lastPlaybackTime = currentTime,
-                    lastSettledTime = currentTime
-                )
+                // 仅在亮屏时允许创建新会话！
+                // 解决“息屏后冷却解封僵尸服务重新计时”：阻断时会话被清，解封时若仍息屏，则拒绝重建会话
+                if (isScreenOn) {
+                    voiceSessions[pkg] = VoiceSession(
+                        packageName = pkg,
+                        sessionStartTime = currentTime,
+                        lastPlaybackTime = currentTime,
+                        lastSettledTime = currentTime
+                    )
+                }
             }
         }
 
@@ -431,24 +456,29 @@ class MonitorService : Service() {
             // 检查是否超时
             if (currentTime - session.lastPlaybackTime > VOICE_SESSION_TIMEOUT_MS) {
                 // 会话超时：结算到 lastPlaybackTime，然后移除
-                val duration = session.lastPlaybackTime - session.lastSettledTime
-                if (duration > 0) {
-                    val secs = (duration / 1000).toInt()
-                    DataManager.addAppCallSeconds(pkg, secs)
-                    DataManager.addAppUsedSeconds(pkg, secs)
-                    DataManager.currentSessionSeconds += secs
+                val durationMs = session.lastPlaybackTime - session.lastSettledTime
+                if (durationMs > 0 && durationMs <= 30_000L) {
+                    val secs = (durationMs / 1000).toInt()
+                    if (secs > 0) {
+                        DataManager.addAppCallSeconds(pkg, secs)
+                        DataManager.addAppUsedSeconds(pkg, secs)
+                        DataManager.currentSessionSeconds += secs
+                    }
                 }
                 expiredSessions.add(pkg)
                 Log.d(TAG, "Voice session expired: $pkg")
             } else {
                 // 会话仍活跃：结算到当前时刻
-                val secs = ((currentTime - session.lastSettledTime) / 1000).toInt()
-                if (secs > 0) {
-                    DataManager.addAppCallSeconds(pkg, secs)
-                    DataManager.addAppUsedSeconds(pkg, secs)
-                    DataManager.currentSessionSeconds += secs
-                    session.lastSettledTime = currentTime
+                val durationMs = currentTime - session.lastSettledTime
+                if (durationMs > 0 && durationMs <= 30_000L) { // 防止 Doze 暴增
+                    val secs = (durationMs / 1000).toInt()
+                    if (secs > 0) {
+                        DataManager.addAppCallSeconds(pkg, secs)
+                        DataManager.addAppUsedSeconds(pkg, secs)
+                        DataManager.currentSessionSeconds += secs
+                    }
                 }
+                session.lastSettledTime = currentTime
                 isAnyActive = true
             }
         }
@@ -465,9 +495,9 @@ class MonitorService : Service() {
     private fun settleAndClearVoiceSessions() {
         val currentTime = System.currentTimeMillis()
         for ((pkg, session) in voiceSessions) {
-            val duration = currentTime - session.lastSettledTime
-            if (duration > 0) {
-                val secs = (duration / 1000).toInt()
+            val durationMs = currentTime - session.lastSettledTime
+            if (durationMs > 0 && durationMs <= 30_000L) {
+                val secs = (durationMs / 1000).toInt()
                 if (secs > 0) {
                     DataManager.addAppCallSeconds(pkg, secs)
                     DataManager.addAppUsedSeconds(pkg, secs)

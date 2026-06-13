@@ -37,50 +37,10 @@ object DataManager {
     // In-memory lock state. True by default so cold starts are always locked.
     var isAppUnlocked: Boolean = false
 
-    // Phase 4: Global Time Controls & Guardian-Policies Proxy Getters
+    // Phase 4: Global Time Controls
     var dailyTotalLimitMinutes: Int
-        get() {
-            val dayOfWeek = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_WEEK)
-            val specificLimit = kv.decodeInt("limit_daily_day_$dayOfWeek", -1)
-            if (specificLimit != -1) return specificLimit
-            return kv.decodeInt("dailyTotalLimitMinutes", 120)
-        }
+        get() = kv.decodeInt("dailyTotalLimitMinutes", 120)
         set(value) { kv.encode("dailyTotalLimitMinutes", value) }
-
-    fun getSpecificDayLimit(dayOfWeek: Int): Int {
-        return kv.decodeInt("limit_daily_day_$dayOfWeek", -1)
-    }
-
-    fun setSpecificDayLimit(dayOfWeek: Int, minutes: Int) {
-        kv.encode("limit_daily_day_$dayOfWeek", minutes)
-    }
-
-    // --- Guardian-Policies: Sleep Mode ---
-    var isSleepModeEnabled: Boolean
-        get() = kv.decodeBool("isSleepModeEnabled", false)
-        set(value) { kv.encode("isSleepModeEnabled", value) }
-
-    var sleepStartTime: Int // 分钟数, 比如 21:30 = 21 * 60 + 30 = 1290
-        get() = kv.decodeInt("sleepStartTime", 1320) // 默认 22:00
-        set(value) { kv.encode("sleepStartTime", value) }
-
-    var sleepEndTime: Int
-        get() = kv.decodeInt("sleepEndTime", 480) // 默认 08:00
-        set(value) { kv.encode("sleepEndTime", value) }
-
-    fun isCurrentlyInSleepMode(): Boolean {
-        if (!isSleepModeEnabled) return false
-        val cal = java.util.Calendar.getInstance()
-        val currentMinutes = cal.get(java.util.Calendar.HOUR_OF_DAY) * 60 + cal.get(java.util.Calendar.MINUTE)
-        val start = sleepStartTime
-        val end = sleepEndTime
-        
-        return if (start < end) {
-            currentMinutes in start until end
-        } else {
-            currentMinutes >= start || currentMinutes < end
-        }
-    }
 
     var continuousLimitMinutes: Int
         get() = kv.decodeInt("continuousLimitMinutes", 30)

@@ -1,8 +1,8 @@
 {
-  "latestVersionCode": 10,
-  "latestVersionName": "0.1.8",
+  "latestVersionCode": 12,
+  "latestVersionName": "0.1.10",
   "forceUpdate": false,
-  "updateTitle": "发现新版本 v0.1.8",
-  "updateMessage": "• 调整部署目录，APK 下载地址迁移至新路径\n• 优化发布流程，APK 文件名固定不再带版本号",
+  "updateTitle": "发现新版本 v0.1.10",
+  "updateMessage": "• 新增睡眠安息模式，支持自定义夜间硬性阻断\n• 新增周末/工作日限额双轨制设定，额度分配更灵活\n• 修复息屏状态下数据虚增与解封重计时的异常",
   "downloadUrl": "https://www.yes-tek.com/assets/apk/SilentGuardian.apk"
 }
