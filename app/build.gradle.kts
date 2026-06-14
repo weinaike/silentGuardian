@@ -1,7 +1,18 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+// [Failsafe] Signing credentials are loaded from app/keystore.properties (gitignored).
+// Community contributors who clone without it still get a buildable release variant
+// (just unsigned), so the repo can be public without leaking the production key.
+val keystoreProperties = Properties().apply {
+    val f = rootProject.file("app/keystore.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val hasSigningConfig = keystoreProperties.containsKey("storeFile")
 
 android {
     namespace = "com.yestek.silentguardian"
@@ -16,11 +27,13 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            storeFile = file("release.keystore")
-            storePassword = "123456"
-            keyAlias = "silentguardian"
-            keyPassword = "123456"
+        if (hasSigningConfig) {
+            create("release") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
         }
     }
 
@@ -28,7 +41,9 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+            // Falls back to unsigned when keystore.properties is absent, so the repo
+            // remains buildable without the production signing key.
+            signingConfig = if (hasSigningConfig) signingConfigs.getByName("release") else null
         }
     }
 

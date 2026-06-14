@@ -9,6 +9,12 @@ app/build/
 .externalNativeBuild
 .cxx
 
+# Signing secrets — NEVER commit
+# [Failsafe] release.keystore + keystore.properties hold the production signing key.
+# Removing these lines or the files they protect breaks the app's update trust chain.
+app/release.keystore
+app/keystore.properties
+
 # Virtual Environments
 venv/
 
