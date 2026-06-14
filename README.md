@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🛡️ SilentGuardian
+<img src="./docs/logo.png" alt="SilentGuardian" width="120">
+
+# SilentGuardian
 
 **A self-discipline companion that keeps you off the apps you can't stop opening — without ever feeling like parental control software.**
 

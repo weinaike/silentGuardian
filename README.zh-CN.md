@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🛡️ SilentGuardian（沉默守护者）
+<img src="./docs/logo.png" alt="SilentGuardian" width="120">
+
+# SilentGuardian（沉默守护者）
 
 **一个不像家长控制软件、却让你戒掉"再刷五分钟"的自律陪伴 App。**
 
