@@ -135,7 +135,7 @@ class OtherFragment : Fragment() {
                 .setTimeFormat(com.google.android.material.timepicker.TimeFormat.CLOCK_24H)
                 .setHour(current / 60)
                 .setMinute(current % 60)
-                .setTitleText("选择入睡时间")
+                .setTitleText(R.string.settings_select_sleep_start)
                 .build()
             picker.addOnPositiveButtonClickListener {
                 val newTime = picker.hour * 60 + picker.minute
@@ -151,7 +151,7 @@ class OtherFragment : Fragment() {
                 .setTimeFormat(com.google.android.material.timepicker.TimeFormat.CLOCK_24H)
                 .setHour(current / 60)
                 .setMinute(current % 60)
-                .setTitleText("选择起床时间")
+                .setTitleText(R.string.settings_select_sleep_end)
                 .build()
             picker.addOnPositiveButtonClickListener {
                 val newTime = picker.hour * 60 + picker.minute
@@ -180,7 +180,7 @@ class OtherFragment : Fragment() {
             if (isSplitMode) {
                 toggleMode.check(R.id.btnSplit)
                 llWeekendLimit.visibility = View.VISIBLE
-                tvDailyLimitTitle.text = "工作日每日总时长"
+                tvDailyLimitTitle.text = getString(R.string.settings_weekday_limit_title)
 
                 val weekdayLimit = DataManager.getSpecificDayLimit(2).takeIf { it != -1 } ?: com.tencent.mmkv.MMKV.defaultMMKV().decodeInt("dailyTotalLimitMinutes", 120)
                 val weekendLimit = DataManager.getSpecificDayLimit(1).takeIf { it != -1 } ?: com.tencent.mmkv.MMKV.defaultMMKV().decodeInt("dailyTotalLimitMinutes", 120)

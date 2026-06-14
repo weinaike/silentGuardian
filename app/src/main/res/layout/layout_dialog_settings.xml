@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="睡眠安息模式"
+                android:text="@string/settings_sleep_mode"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
@@ -111,7 +111,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="统一额度"
+                android:text="@string/settings_unified_limit"
                 style="?attr/materialButtonOutlinedStyle" />
                 
             <com.google.android.material.button.MaterialButton
@@ -119,7 +119,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="工作日 / 周末"
+                android:text="@string/settings_split_limit"
                 style="?attr/materialButtonOutlinedStyle" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -179,7 +179,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="周末每日总时长"
+                    android:text="@string/settings_weekend_limit_title"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"/>
                 <View

@@ -155,5 +155,14 @@
     <string name="home_sleep_mode_title">睡眠安息模式</string>
     <string name="home_sleep_mode_desc">请放下手机，好好休息</string>
     <string name="home_sleep_mode_status">当前时段已被锁定</string>
+    
+    <string name="settings_sleep_mode">睡眠安息模式</string>
+    <string name="settings_unified_limit">统一额度</string>
+    <string name="settings_split_limit">工作日 / 周末</string>
+    <string name="settings_weekday_limit_title">工作日每日总时长</string>
+    <string name="settings_weekend_limit_title">周末每日总时长</string>
+    <string name="settings_time_to">至</string>
+    <string name="settings_select_sleep_start">选择入睡时间</string>
+    <string name="settings_select_sleep_end">选择起床时间</string>
 
 </resources>

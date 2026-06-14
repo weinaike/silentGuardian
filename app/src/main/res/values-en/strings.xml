@@ -152,4 +152,17 @@
 
     <!-- Format helpers -->
     <string name="time_format_mm_ss">%02d:%02d</string>
+
+    <string name="home_sleep_mode_title">Bedtime Mode</string>
+    <string name="home_sleep_mode_desc">Put down your phone and rest</string>
+    <string name="home_sleep_mode_status">Locked during this period</string>
+
+    <string name="settings_sleep_mode">Bedtime Mode</string>
+    <string name="settings_unified_limit">Unified Limit</string>
+    <string name="settings_split_limit">Weekday / Weekend</string>
+    <string name="settings_weekday_limit_title">Weekday Daily Limit</string>
+    <string name="settings_weekend_limit_title">Weekend Daily Limit</string>
+    <string name="settings_time_to">to</string>
+    <string name="settings_select_sleep_start">Select Bedtime</string>
+    <string name="settings_select_sleep_end">Select Wake-up Time</string>
 </resources>

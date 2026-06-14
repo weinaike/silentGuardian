@@ -8,6 +8,7 @@
 - **目标 SDK 版本**: `minSdkVersion` = 24 (Android 7.0), `targetSdkVersion` = 34 (Android 14)。
 - **包名约定**: `com.yestek.silentguardian`。
 - **UI 架构**: 采用 **Material Components + ViewBinding + ViewModel** 模式。未经主控用户同意，不得私自引入 Compose 或其他 UI 框架。
+- **国际化与多语言 (I18n)**: 任何新增的 UI 文案（字符串），必须通过 `strings.xml` 引用，**严禁在代码或布局文件中硬编码中文字符串**。每次添加新的中文字符串时，**必须强制同步**在 `values-en/strings.xml` 中添加对应的英文翻译，确保中英文双语环境无缝切换。
 
 ## 2. 依赖项及第三方库规范
 
@@ -109,4 +110,29 @@ git push origin v<versionName>
 | `updateTitle` | 更新弹窗标题，建议写 `发现新版本 v<版本号>` |
 | `updateMessage` | 更新日志，支持 `\n` 换行，列出本版本改动要点 |
 | `downloadUrl` | APK 下载直链，格式固定为 `https://www.yes-tek.com/assets/apk/SilentGuardian.apk` |
+
+## 7. AI 协作与长效维护规范 (AI Collaboration & Maintenance)
+
+为了确保多个 AI Agent 在长周期的交接中不产生上下文断层和代码腐化，必须严格遵守以下规范：
+
+### 7.1 强制自测与交付闭环
+- **编译自证**：任何 UI 调整、逻辑修改或库更新完成后，Agent 必须主动通过工具执行 `gradle assembleDebug` (或对应的构建命令) 验证编译。只有在确认 `BUILD SUCCESSFUL` 之后，方可向主控用户汇报“修改已完成”。绝不允许交付带有语法错误或漏导包的半成品。
+
+### 7.2 本地存储 (MMKV) 键值集中管理
+- **消除魔法字符串**：所有的 MMKV Key 必须统一在 `DataManager` 的 `companion object` 中声明为全局常量（`const val`）。严禁在业务 Fragment 或 Service 中直接硬编码字符串（Magic Strings）作为存取 Key。
+
+### 7.3 UI 与资源硬编码禁令
+- **颜色与尺寸**：严禁在 `layout.xml` 中直接硬编码十六进制颜色值（如 `#FF0000`），必须引用 `@color/` 或主题属性 `?attr/`；尺寸边距应规范使用常用 dp 间距，以便后续深色模式适配和 UI 统一。
+
+### 7.4 跨 AI 上下文的注释原则
+- **Why over What**：代码注释不仅仅要说明“做了什么”，更要清晰说明“为什么这么做”（业务背景和取舍）。
+- **兜底标记**：遇到绕过系统限制的特殊处理（如处理 Doze 机制的跳变），必须在注释中显式打上 `[Hack]` 或 `[Failsafe]` 标签，警告后续接手的 AI 切勿将这些“看似冗余”的代码轻易精简或删除。
+
+### 7.5 Git 提交规范
+- 强制采用常规提交 (Conventional Commits) 规范，保持 AI 生成的提交历史清晰可溯：
+  - `feat:` (新功能)
+  - `fix:` (修复 bug)
+  - `refactor:` (代码重构，不改变功能)
+  - `chore:` (构建过程、脚本改动或发版)
+
 
