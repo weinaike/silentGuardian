@@ -24,10 +24,12 @@ fi
 
 echo "当前版本号: v$VERSION_NAME (Code: $VERSION_CODE)"
 
-echo -e "\n${GREEN}>>> 2. 开始构建 Release APK...${NC}"
+echo -e "\n${GREEN}>>> 2. 开始构建 Release APK 与 AAB...${NC}"
 gradle assembleRelease
+gradle bundleRelease
 
 APK_PATH="app/build/outputs/apk/release/app-release.apk"
+AAB_PATH="app/build/outputs/bundle/release/app-release.aab"
 if [ ! -f "$APK_PATH" ]; then
     echo -e "${RED}构建失败：未找到 APK 文件 ($APK_PATH)！${NC}"
     exit 1

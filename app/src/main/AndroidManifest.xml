@@ -82,6 +82,10 @@
         <service
             android:name=".service.MonitorService"
             android:foregroundServiceType="specialUse"
-            android:exported="false" />
+            android:exported="false">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Used to continuously monitor foreground app usage and manage screen time rules locally for digital wellbeing." />
+        </service>
     </application>
 </manifest>
