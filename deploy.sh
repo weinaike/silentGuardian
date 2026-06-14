@@ -4,14 +4,36 @@
 # SilentGuardian - 一键部署发布脚本
 # 1. 提取 build.gradle.kts 中的版本号
 # 2. 编译 Release APK
-# 3. SCP 上传 APK 到阿里云服务器
+# 3. SCP 上传 APK 到部署服务器
 # 4. 生成 update_config.json 并上传到服务器
+#
+# [Failsafe] 服务器凭证从环境变量读取，避免把生产服务器信息
+# 硬编码进公开仓库。配置方式任选其一：
+#   (a) cp .env.deploy.example .env.deploy && 填好后 source 它
+#   (b) 在 ~/.zshrc 中 export SG_DEPLOY_HOST / SG_DEPLOY_PATH
 # ==========================================================
 
 # 颜色高亮
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
+
+# 自动加载 gitignored 的 .env.deploy（如果存在）
+if [ -f ".env.deploy" ]; then
+    set -a
+    source .env.deploy
+    set +a
+fi
+
+# 校验服务器凭证环境变量
+if [ -z "$SG_DEPLOY_HOST" ] || [ -z "$SG_DEPLOY_PATH" ]; then
+    echo -e "${RED}错误：缺少服务器凭证环境变量。${NC}"
+    echo -e "请在 .env.deploy（参考 .env.deploy.example）或 shell 中设置："
+    echo -e "  ${YELLOW}SG_DEPLOY_HOST${NC}    SSH 目标主机，例如 admin@your.server.com"
+    echo -e "  ${YELLOW}SG_DEPLOY_PATH${NC}    服务器上 APK 存放目录的绝对路径"
+    exit 1
+fi
 
 echo -e "${GREEN}>>> 1. 读取版本信息...${NC}"
 VERSION_NAME=$(grep 'versionName = ' app/build.gradle.kts | awk -F'"' '{print $2}')
@@ -35,20 +57,20 @@ if [ ! -f "$APK_PATH" ]; then
     exit 1
 fi
 
-echo -e "\n${GREEN}>>> 3. 上传 APK 到阿里云服务器...${NC}"
+echo -e "\n${GREEN}>>> 3. 上传 APK 到部署服务器...${NC}"
 TARGET_APK_NAME="SilentGuardian.apk"
-REMOTE_HOST="admin@47.237.161.121"
-REMOTE_APK_DIR="/home/admin/website/assets/apk"
+REMOTE_HOST="$SG_DEPLOY_HOST"
+REMOTE_APK_DIR="$SG_DEPLOY_PATH"
 DOWNLOAD_BASE_URL="https://www.yes-tek.com/assets/apk"
 
 scp -o StrictHostKeyChecking=no -o BatchMode=yes -o ServerAliveInterval=60 \
     "$APK_PATH" "${REMOTE_HOST}:${REMOTE_APK_DIR}/${TARGET_APK_NAME}"
 
 if [ $? -ne 0 ]; then
-    echo -e "${RED}APK 上传失败！请检查服务器连接。${NC}"
+    echo -e "${RED}APK 上传失败！请检查服务器连接或 SG_DEPLOY_HOST / SG_DEPLOY_PATH 是否正确。${NC}"
     exit 1
 fi
-echo "APK 已上传: ${REMOTE_APK_DIR}/${TARGET_APK_NAME}"
+echo "APK 已上传: ${REMOTE_HOST}:${REMOTE_APK_DIR}/${TARGET_APK_NAME}"
 
 echo -e "\n${GREEN}>>> 4. 更新并上传本地 update_config.json...${NC}"
 

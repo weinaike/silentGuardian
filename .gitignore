@@ -15,6 +15,10 @@ app/build/
 app/release.keystore
 app/keystore.properties
 
+# Deployment credentials — NEVER commit
+# [Failsafe] .env.deploy holds production server host and path. Source only locally.
+.env.deploy
+
 # Virtual Environments
 venv/
 
