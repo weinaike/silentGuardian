@@ -93,12 +93,15 @@ bash deploy.sh
 3. `scp` 上传至阿里云 `/home/admin/gost/brand/apk/SilentGuardian_v<版本号>.apk`
 4. 读取根目录 `update_config.json` 中的字段，生成含最新版本号与下载链接的 JSON，scp 上传覆盖服务器上的 `update_config.json`
 
-**第四步（可选）：将主仓库 tag 打上**
+**第三步半（可选）：同步发不到 GitHub Release**
+
+`deploy.sh` 支持 `--github` 参数（或环境变量 `SG_RELEASE_GITHUB=1`），会在 GitHub 上为 `v<versionName>` 创建 Release 并挂载签名 APK 附件，Release 说明自动复用 `update_config.json` 的双语 changelog。tag 由脚本在当前 HEAD 自动创建，**无需再手动 `git tag`**。幂等：重复执行不会因 release/asset 已存在而报错。
 
 ```bash
-git tag v<versionName>
-git push origin v<versionName>
+bash deploy.sh --github
 ```
+
+> Token 默认走 git 凭证（与 `git push` 同源，零配置）；也可用 `SG_GITHUB_TOKEN` 环境变量覆盖。依赖 `jq`。
 
 ### 6.2 update_config.json 字段说明
 
