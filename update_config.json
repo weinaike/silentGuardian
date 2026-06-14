@@ -1,8 +1,8 @@
 {
-  "latestVersionCode": 13,
-  "latestVersionName": "0.1.11",
+  "latestVersionCode": 14,
+  "latestVersionName": "0.1.12",
   "forceUpdate": false,
-  "updateTitle": "发现新版本 v0.1.11",
-  "updateMessage": "• 补充新功能的中英文双语国际化适配\n• 更新并强化内部 AI 协作规范，提升应用稳定性",
+  "updateTitle": "发现新版本 v0.1.12 / New version v0.1.12",
+  "updateMessage": "🇨🇳 中文更新日志：\n• 适配 Android 14 强制要求的特殊前台服务类型声明\n• 修复打包部署脚本\n\n🇬🇧 English changelog:\n• Comply with Android 14 mandatory special-use foreground service type\n• Fix packaging and deployment script",
   "downloadUrl": "https://www.yes-tek.com/assets/apk/SilentGuardian.apk"
 }
